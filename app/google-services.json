@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "495990642808",
+    "project_id": "avtocentr-86bf2",
+    "storage_bucket": "avtocentr-86bf2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495990642808:android:650da98d899a89e291b58d",
+        "android_client_info": {
+          "package_name": "com.example.avtocentr"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBiNMLPAT8qsjPcghk8ZVLb9NRk2tHYUx8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -31,8 +33,8 @@ public class Glavnaya extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_glavnaya);
 
-        SharedPreferences sp = (SharedPreferences) getSharedPreferences("PC", Context.MODE_PRIVATE);
-        ((SharedPreferences.Editor) sp.edit()).putString("TY","9").commit();
+        SharedPreferences sp = (SharedPreferences) getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
+        ((SharedPreferences.Editor) sp.edit()).putString("Авторизация","9").commit();
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -51,11 +53,13 @@ public class Glavnaya extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 // Очищаем SharedPreferences
+                SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
+                sp.edit().clear().apply();
 
                 // Переходим на активити "Вход"
                 Intent intent = new Intent(Glavnaya.this, MainActivity.class);
-
                 startActivity(intent);
+
                 // Показываем уведомление об успешном выходе из аккаунта
                 Toast.makeText(Glavnaya.this, "Вы успешно вышли из аккаунта", Toast.LENGTH_LONG).show();
             }
@@ -91,9 +95,15 @@ public class Glavnaya extends AppCompatActivity {
             }
         });
 
-        String currentUserEmail = sp.getString("email", "");
+        String currentUserEmail = sp.getString("CurrentUserEmail", "");
         FirebaseFirestore db = FirebaseFirestore.getInstance();
 // Получаем информацию о пользователе из Firestore
+        // Получаем информацию о пользователе из Firestore
+        // Получаем информацию о пользователе из Firestore
+        TextView textViewCurrentUserEmail = findViewById(R.id.textViewCurrentUserEmail);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        textViewCurrentUserEmail.setVisibility(View.GONE);
         db.collection("users")
                 .whereEqualTo("email", currentUserEmail)
                 .get()
@@ -104,13 +114,18 @@ public class Glavnaya extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult().getDocuments().get(0);
                             // Получаем данные пользователя
                             String email = document.getString("email");
-                            // Используем полученные данные
+                            // Устанавливаем email пользователя в TextView
 
+                            textViewCurrentUserEmail.setText("Здравствуйте " + email);
+                            progressBar.setVisibility(View.GONE);
+                            textViewCurrentUserEmail.setVisibility(View.VISIBLE); //
                         } else {
                             // Обработка ошибки или ситуации, когда не найден пользователь
                         }
                     }
                 });
+
+
 
 
     }

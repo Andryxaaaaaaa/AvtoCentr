@@ -22,7 +22,6 @@ import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -50,7 +49,7 @@ public class map extends FragmentActivity  {
 
         // Initialize Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        SharedPreferences sp = getSharedPreferences("TY", Context.MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
 
         // Get references to EditText and Button
         EditText editTextLocation = findViewById(R.id.editTextLocation);
@@ -61,58 +60,42 @@ public class map extends FragmentActivity  {
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String currentUserEmail = sp.getString("email", ""); // Получение текущей электронной почты пользователя из SharedPreferences
+                String currentUserEmail = sp.getString("CurrentUserEmail", ""); // Получение email пользователя из SharedPreferences
                 if (editTextLocation.getText().toString().isEmpty() || editTextDistance.getText().toString().isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Проверьте поля!", Toast.LENGTH_LONG).show();
                 } else {
                     // Check if the user exists
-                    db.collection("map").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            if (!queryDocumentSnapshots.isEmpty()) {
-                                // If the document exists, update it
-                                DocumentSnapshot documentSnapshot = queryDocumentSnapshots.getDocuments().get(0);
-                                String documentId = documentSnapshot.getId();
-                                // Update the existing document
-                                Map<String, Object> mapData = new HashMap<>();
-                                mapData.put("mappoint", editTextLocation.getText().toString());
-                                mapData.put("km", editTextDistance.getText().toString());
-                                // Use the current user's email to update the document
-                                mapData.put("user", currentUserEmail);
-                                db.collection("map").document(documentId).update(mapData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-                                        Toast.makeText(map.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show();
-                                        startActivity(new Intent(map.this, Glavnaya.class));
+                    db.collection("map")
+                            .whereEqualTo("user", currentUserEmail)
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                                        String documentId = documentSnapshot.getId();
+                                        // Update the existing document
+                                        Map<String, Object> mapData = new HashMap<>();
+                                        mapData.put("mappoint", editTextLocation.getText().toString());
+                                        mapData.put("km", editTextDistance.getText().toString());
+                                        // Use the current user's email to update the document
+                                        mapData.put("user", currentUserEmail);
+                                        db.collection("map").document(documentId).update(mapData).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Toast.makeText(map.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show();
+                                                startActivity(new Intent(map.this, Glavnaya.class));
+                                            }
+                                        }).addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(map.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();
+                                            }
+                                        });
+                                        // Если найден документ, соответствующий текущему пользователю, выходим из цикла
+                                        break;
                                     }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(map.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            } else {
-                                // If the document doesn't exist, create a new one
-                                Map<String, Object> mapData = new HashMap<>();
-                                mapData.put("user", currentUserEmail); // Use UID as user identifier
-                                mapData.put("mappoint", editTextLocation.getText().toString());
-                                mapData.put("km", editTextDistance.getText().toString());
-                                // Add the data to Firestore
-                                db.collection("map").add(mapData).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                    @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Toast.makeText(map.this, "Данные успешно сохранены", Toast.LENGTH_LONG).show();
-                                        startActivity(new Intent(map.this, Glavnaya.class));
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Toast.makeText(map.this, "Не удалось сохранить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();
-                                    }
-                                });
-                            }
-                        }
-                    });
+                                }
+                            });
                 }
             }
         });

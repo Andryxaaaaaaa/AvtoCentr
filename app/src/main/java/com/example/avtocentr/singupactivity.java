@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ public class singupactivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        SharedPreferences sp = getSharedPreferences("PC", Context.MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("Регистрация", Context.MODE_PRIVATE);
         TextView email = findViewById(R.id.editTextLogin);
         TextView password = findViewById(R.id.editTextPassword);
         Button button = findViewById(R.id.button);
@@ -74,44 +75,53 @@ public class singupactivity extends AppCompatActivity {
                     user.put("password", password.getText().toString());
 
 
-
-// Add a new document with a generated ID
+// Проверка наличия пользователя с таким email
                     db.collection("users")
-                            .add(user)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            .whereEqualTo("email", email.getText().toString())
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    sp.edit().putString("Email", email.getText().toString()).commit();
+                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                    if (!queryDocumentSnapshots.isEmpty()) {
+                                        // Если найден пользователь с таким email, выводим сообщение об ошибке
+                                        Toast.makeText(singupactivity.this, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show();
+                                    } else {
+                                        sp.edit().putString("Email", email.getText().toString()).commit();
 
-                                    // Создаем новый документ в коллекции "map" с данными пользователя и пустыми значениями "km" и "mappoint"
-                                    Map<String, Object> mapData = new HashMap<>();
-                                    mapData.put("user", documentReference.getId()); // Используем ID документа пользователя в качестве идентификатора пользователя
-                                    mapData.put("km", ""); // Пустое значение для km
-                                    mapData.put("mappoint", ""); // Пустое значение для mappoint
+                                        // Создаем новый документ в коллекции "map" с данными пользователя и пустыми значениями "km" и "mappoint"
+                                        Map<String, Object> mapData = new HashMap<>();
+                                        mapData.put("user", email.getText().toString()); // Используем ID документа пользователя в качестве идентификатора пользователя
+                                        mapData.put("km", ""); // Пустое значение для km
+                                        mapData.put("mappoint", ""); // Пустое значение для mappoint
 
-                                    db.collection("map")
-                                            .add(mapData)
-                                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                @Override
-                                                public void onSuccess(DocumentReference documentReference) {
-                                                    // После успешного создания документа в коллекции "map" переходим на главный экран
-                                                    startActivity(new Intent(singupactivity.this, Glavnaya.class));
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Toast.makeText(singupactivity.this, "Не удалось создать документ в коллекции 'map'", Toast.LENGTH_LONG).show();
-                                                }
-                                            });
+                                        db.collection("map")
+                                                .add(mapData)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        // После успешного создания документа в коллекции "map" переходим на главный экран
+                                                        startActivity(new Intent(singupactivity.this, Glavnaya.class));
+                                                    }
+                                                })
+                                                .addOnFailureListener(new OnFailureListener() {
+                                                    @Override
+                                                    public void onFailure(@NonNull Exception e) {
+                                                        Toast.makeText(singupactivity.this, "Не удалось создать документ в коллекции 'map'", Toast.LENGTH_LONG).show();
+                                                    }
+                                                });
+                                    }
                                 }
+
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(singupactivity.this, "Не сработало, попробуйте еще раз", Toast.LENGTH_LONG).show();
+                                    // Обработка ошибки запроса к базе данных
+                                    Toast.makeText(singupactivity.this, "Ошибка при проверке email", Toast.LENGTH_LONG).show();
                                 }
                             });
+// Add a new document with a generated ID
+
                 }
             }
         });

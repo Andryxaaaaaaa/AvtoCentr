@@ -29,15 +29,17 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
+
         SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
         // Проверяем, вошел ли пользователь ранее
         if (sp.contains("CurrentUserEmail")) {
             // Если пользователь уже вошел, перенаправляем его на экран Glavnaya
-            startActivity(new Intent(MainActivity.this, Glavnaya.class));
+            startActivity(new Intent(MainActivity.this, Osnovnaja.class));
             finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
         }
         // Находим кнопку по ее идентификатору
         Button button = findViewById(R.id.button);
+        Button button2 = findViewById(R.id.button2);
         // Устанавливаем слушатель кликов для кнопки
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -47,6 +49,14 @@ public class MainActivity extends AppCompatActivity {
          TextView email = findViewById(R.id.editTextLogin);
          TextView password = findViewById(R.id.editTextPassword);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, singupactivity.class));
+            }
+
+
+        });
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
                                         // Сохраняем состояние входа пользователя в SharedPreferences
                                         sp.edit().putString("CurrentUserEmail", userEmail).apply();
                                         // Перенаправляем на главный экран
-                                        startActivity(new Intent(MainActivity.this, Glavnaya.class));
+                                        startActivity(new Intent(MainActivity.this, Osnovnaja.class));
                                         finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
                                     } else {
                                         // Пользователь не найден

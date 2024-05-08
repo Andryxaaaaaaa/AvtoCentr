@@ -19,6 +19,9 @@
         android:theme="@style/Theme.AvtoCentr"
         tools:targetApi="31">
         <activity
+            android:name=".Osnovnaja"
+            android:exported="false" />
+        <activity
             android:name=".Profile"
             android:exported="false" />
         <activity

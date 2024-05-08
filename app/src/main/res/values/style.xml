@@ -3,4 +3,8 @@
     <style name="CircularProgressBar" parent="Widget.AppCompat.ProgressBar">
         <item name="android:indeterminateDrawable">@drawable/circular_progress_bar</item>
     </style>
+    <style name="RadioButtonTextStyle">
+        <item name="android:textColor">@color/radio_button_text_color</item> <!-- Цвет текста -->
+        <item name="android:textSize">16sp</item> <!-- Размер текста -->
+    </style>
 </resources>

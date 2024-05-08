@@ -4,9 +4,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,8 +32,24 @@ public class PDF extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pdf);
-        Spinner spinner = findViewById(R.id.userSpinner);
-        EditText fioEditText = findViewById(R.id.fioEditText);
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        LinearLayout layoutMaintenance = findViewById(R.id.layoutMaintenance);
+        LinearLayout layoutRepair = findViewById(R.id.layoutRepair);
+
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.radioMaintenance) {
+                    // Показать раздел "Техобслуживание", скрыть раздел "Ремонт"
+                    layoutMaintenance.setVisibility(View.VISIBLE);
+                    layoutRepair.setVisibility(View.GONE);
+                } else if (checkedId == R.id.radioRepair) {
+                    // Показать раздел "Ремонт", скрыть раздел "Техобслуживание"
+                    layoutMaintenance.setVisibility(View.GONE);
+                    layoutRepair.setVisibility(View.VISIBLE);
+                }
+            }
+        });
         Button button = findViewById(R.id.button4);
         String tag = "";
 
@@ -74,18 +91,17 @@ public class PDF extends AppCompatActivity {
                 store.close();
 
                 // Выводим результат на экран с использованием UI-потока
-                new Handler(Looper.getMainLooper()).post(() ->
-                        Toast.makeText(PDF.this, "Количество непрочитанных сообщений: " + messageCount, Toast.LENGTH_LONG).show());
-                button.setOnClickListener(v -> {
-                    String selection = spinner.getSelectedItem().toString();
-                    String fio = fioEditText.getText().toString();
 
-                    String message = "Сообщение прошу произвести мне " + selection + "\n" +
-                            "ФИО: " + fio + "\n" +
+                button.setOnClickListener(v -> {
+
+
+
+                    String message = "Сообщение прошу произвести мне " + "\n" +
+                            "ФИО: "  + "\n" +
                             "Адрес:--- " + "\n" +
                             "Километры:--- ";
 
-                    new Thread(() -> sendMail("kaltaevaangelina@mail.ru", selection, message)).start();
+                    new Thread(() -> sendMail("kaltaevaangelina@mail.ru" ,  message)).start();
                 });
 
 
@@ -97,7 +113,7 @@ public class PDF extends AppCompatActivity {
             }
         }).start();
     }
-    private void sendMail(String recipient, String subject, String body) {
+    private void sendMail(String recipient,  String body) {
         final String username = "santa5435@mail.ru"; // Ваша почта
         final String password = "TdXP5DNNc9pTFrdAmNqW"; // Пароль от почты
 
@@ -119,7 +135,7 @@ public class PDF extends AppCompatActivity {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-            message.setSubject(subject);
+
             message.setText(body);
 
             Transport.send(message);

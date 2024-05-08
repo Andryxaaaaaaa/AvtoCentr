@@ -80,7 +80,7 @@ public class Glavnaya extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent = new Intent(Glavnaya.this, PDF.class);
+                Intent intent = new Intent(Glavnaya.this, Osnovnaja.class);
                 startActivity(intent);
 
             }

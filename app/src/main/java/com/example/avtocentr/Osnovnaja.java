@@ -1,27 +1,28 @@
 package com.example.avtocentr;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -29,7 +30,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.HashMap;
 import java.util.Map;
 
-public class map extends FragmentActivity  {
+
+public class Osnovnaja extends AppCompatActivity {
+
     // Код запроса для обратного вызова
     private static final int REQUEST_PICK_LOCATION = 1;
     // Код запроса для разрешения доступа к местоположению
@@ -41,20 +44,106 @@ public class map extends FragmentActivity  {
 
     // Ссылка на TextView
     private TextView distanceTextView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map);
 
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_osnovnaja);
+        RadioGroup radioGroup = findViewById(R.id.radioGroup);
+        RadioGroup radioGroup2 = findViewById(R.id.radioGroup2);
+        LinearLayout layoutMaintenance = findViewById(R.id.layoutMaintenance);
+        LinearLayout ZajavkaLayout = findViewById(R.id.ZajavkaLayout);
+        LinearLayout MapLayout = findViewById(R.id.MapLayout);
+        ImageView imageView = findViewById(R.id.imageView);
+        ImageView imageView2 = findViewById(R.id.imageView2);
+        ImageView imageView3 = findViewById(R.id.imageView3);
+        // Получаем ссылку на ImageView
+         // Устанавливаем цвет фильтра
+        LinearLayout layoutRepair = findViewById(R.id.layoutRepair);
         // Initialize Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
-
+        ((SharedPreferences.Editor) sp.edit()).putString("Авторизация","9").commit();
         // Get references to EditText and Button
         EditText editTextLocation = findViewById(R.id.editTextLocation);
         EditText editTextDistance = findViewById(R.id.editTextDistance);
         Button saveButton = findViewById(R.id.button6);
+        String currentUserEmail = sp.getString("CurrentUserEmail", "");
+
+        imageView.setColorFilter(getResources().getColor(R.color.your_desired_color));
+        imageView2.setColorFilter(getResources().getColor(R.color.your_desired_color));
+
+        imageView3.setColorFilter(getResources().getColor(R.color.your_desired_color));
+// Получаем информацию о пользователе из Firestore
+        // Получаем информацию о пользователе из Firestore
+        // Получаем информацию о пользователе из Firestore
+        TextView textViewCurrentUserEmail = findViewById(R.id.textViewCurrentUserEmail);
+        ProgressBar progressBar = findViewById(R.id.progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+        textViewCurrentUserEmail.setVisibility(View.GONE);
+        db.collection("users")
+                .whereEqualTo("email", currentUserEmail)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful() && !task.getResult().isEmpty()) {
+                            DocumentSnapshot document = task.getResult().getDocuments().get(0);
+                            // Получаем данные пользователя
+                            String email = document.getString("email");
+                            // Устанавливаем email пользователя в TextView
+
+                            textViewCurrentUserEmail.setText(email);
+                            progressBar.setVisibility(View.GONE);
+                            textViewCurrentUserEmail.setVisibility(View.VISIBLE); //
+                        } else {
+                            // Обработка ошибки или ситуации, когда не найден пользователь
+                        }
+                    }
+                });
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+                if (checkedId == R.id.radioMaintenance) {
+                    // Показать раздел "Техобслуживание", скрыть раздел "Ремонт"
+                    layoutMaintenance.setVisibility(View.VISIBLE);
+
+                    layoutRepair.setVisibility(View.GONE);
+                } else if (checkedId == R.id.radioRepair) {
+                    // Показать раздел "Ремонт", скрыть раздел "Техобслуживание"
+                    layoutMaintenance.setVisibility(View.GONE);
+
+                    layoutRepair.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+        radioGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (checkedId == R.id.Zajavka) {
+                    // Показать раздел Заявки,
+                    ZajavkaLayout.setVisibility(View.VISIBLE);
+                    MapLayout.setVisibility(View.GONE);
+                    imageView.setColorFilter(getResources().getColor(R.color.your_desired_color));
+                    imageView2.setColorFilter(getResources().getColor(R.color.your_desired_color2));
+
+                    imageView3.setColorFilter(getResources().getColor(R.color.your_desired_color));
+
+                } else if (checkedId == R.id.Karta) {
+                    MapLayout.setVisibility(View.VISIBLE);
+                    ZajavkaLayout.setVisibility(View.GONE);
+                    imageView.setColorFilter(getResources().getColor(R.color.your_desired_color));
+                    imageView3.setColorFilter(getResources().getColor(R.color.your_desired_color2));
+                    imageView2.setColorFilter(getResources().getColor(R.color.your_desired_color));
+                }
+                else if (checkedId == R.id.Glavnaja) {
+
+
+                }
+            }
+        });
+
 
 
         saveButton.setOnClickListener(new View.OnClickListener() {
@@ -82,13 +171,13 @@ public class map extends FragmentActivity  {
                                         db.collection("map").document(documentId).update(mapData).addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(map.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show();
-                                                startActivity(new Intent(map.this, Glavnaya.class));
+                                                Toast.makeText(Osnovnaja.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show();
+
                                             }
                                         }).addOnFailureListener(new OnFailureListener() {
                                             @Override
                                             public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(map.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(Osnovnaja.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();
                                             }
                                         });
                                         // Если найден документ, соответствующий текущему пользователю, выходим из цикла
@@ -104,10 +193,10 @@ public class map extends FragmentActivity  {
 
         // Проверяем наличие разрешения на доступ к местоположению
         if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Если разрешение не было предоставлено, запрашиваем его у пользователя
             ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+                    new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         } else {
             // Если разрешение уже было предоставлено, открываем карту
             openMap();
@@ -116,7 +205,7 @@ public class map extends FragmentActivity  {
 
     private void openMap() {
         // Получаем местоположение пользователя, если разрешение на доступ к местоположению было предоставлено
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+        /*if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             // Получаем доступ к провайдеру местоположения
             // В реальном приложении следует также проверить наличие провайдера и обработать ситуацию, когда местоположение не доступно
@@ -131,35 +220,35 @@ public class map extends FragmentActivity  {
                 double distance = calculateDistance(startLatitude, startLongitude, endLatitude, endLongitude);
 
                 // Создание URI для запроса открытия карты с указанием стартовой и конечной точек маршрута
-                Uri mapUri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=" +
-                        startLatitude + "," + startLongitude + "&destination=" + endLatitude + "," + endLongitude);
+                //Uri mapUri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=" +
+                        //startLatitude + "," + startLongitude + "&destination=" + endLatitude + "," + endLongitude);
 
                 // Создание интента для открытия карты
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
+                //Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
 
                 // Установка флага для обязательного использования приложения Google Maps
-                mapIntent.setPackage("com.google.android.apps.maps");
+                //mapIntent.setPackage("com.google.android.apps.maps");
 
                 // Добавление флага для закрытия всех активностей, связанных с картой, после ее открытия
-                mapIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                //mapIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
                 // Проверка наличия устройства для обработки интента
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+               // if (mapIntent.resolveActivity(getPackageManager()) != null) {
                     // Запуск активности для открытия карты
-                    startActivity(mapIntent);
-                } else {
+                   // startActivity(mapIntent);
+               // } else {
                     // Обработка случая, когда не найдено приложение для открытия карты
-                    Toast.makeText(this, "Приложение для карт не найдено", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(this, "Приложение для карт не найдено", Toast.LENGTH_SHORT).show();
                 }
 
                 // Вывод второй точки в logcat
-                Log.d("SecondPoint", "Latitude: " + endLatitude + ", Longitude: " + endLongitude);
-            } else {
+               // Log.d("SecondPoint", "Latitude: " + endLatitude + ", Longitude: " + endLongitude);
+           // } else {
                 // Обработка случая, когда местоположение пользователя не доступно
-                Toast.makeText(this, "Местоположение пользователя не доступно", Toast.LENGTH_SHORT).show();
+             //   Toast.makeText(this, "Местоположение пользователя не доступно", Toast.LENGTH_SHORT).show();
             }
         }
-    }
+
 
     // Получение текущего местоположения пользователя
     private Location getCurrentLocation() {
@@ -210,5 +299,10 @@ public class map extends FragmentActivity  {
         double distance = RADIUS_EARTH * c;
 
         return distance;
-    }
+    }*/
 }
+}
+
+
+
+

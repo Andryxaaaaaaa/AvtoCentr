@@ -46,7 +46,7 @@ public class singupactivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(singupactivity.this, Glavnaya.class ));
+                startActivity(new Intent(singupactivity.this, Osnovnaja.class ));
             }
         });
         button2.setOnClickListener(new View.OnClickListener() {
@@ -54,7 +54,7 @@ public class singupactivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                startActivity(new Intent(singupactivity.this, Glavnaya.class ));
+                startActivity(new Intent(singupactivity.this, MainActivity.class ));
 
             }
         });
@@ -100,7 +100,7 @@ public class singupactivity extends AppCompatActivity {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
                                                         // После успешного создания документа в коллекции "map" переходим на главный экран
-                                                        startActivity(new Intent(singupactivity.this, Glavnaya.class));
+                                                        startActivity(new Intent(singupactivity.this, Osnovnaja.class));
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {

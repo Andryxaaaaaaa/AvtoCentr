@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".singupactivity"
+    android:background="@color/white">
+
+
+
+
+    <EditText
+        android:id="@+id/editTextFamiliya"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/editTextInfo2"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:backgroundTint="#E7E1E1"
+        android:gravity="left"
+        android:paddingTop="7dp"
+        android:hint="   Введите вашу Фамилию"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextImya"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/editTextFamiliya"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:backgroundTint="#E7E1E1"
+        android:gravity="left"
+        android:paddingTop="7dp"
+        android:hint="   Введите ваше имя"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextOtchestvo"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/editTextImya"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:backgroundTint="#E7E1E1"
+        android:paddingTop="7dp"
+        android:gravity="left"
+        android:hint="   Введите ваше Отчество"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextNomer"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/editTextOtchestvo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:backgroundTint="#E7E1E1"
+        android:paddingTop="7dp"
+        android:gravity="left"
+        android:hint="   Введите ваш номер телефона"
+        android:inputType="phone" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+
+
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="40dp"
+        android:background="@drawable/dlyabutton"
+        android:text="Завершить регистрацию"
+        android:textColor="#FFFFFF" />
+
+    <TextView
+        android:id="@+id/editTextInfo"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="25dp"
+        android:textSize="10pt"
+        android:textColor="@color/black"
+        android:text="Стать клиентом автоцентр" />
+
+    <TextView
+        android:id="@+id/editTextInfo2"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/editTextInfo"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="121dp"
+        android:layout_marginEnd="25dp"
+        android:text="Укажите ваши данные, чтобы использовать все функции приложения"
+         />
+
+
+</RelativeLayout>

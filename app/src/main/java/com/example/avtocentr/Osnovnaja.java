@@ -1,15 +1,17 @@
 package com.example.avtocentr;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,9 +56,9 @@ public class Osnovnaja extends AppCompatActivity {
         LinearLayout layoutMaintenance = findViewById(R.id.layoutMaintenance);
         LinearLayout ZajavkaLayout = findViewById(R.id.ZajavkaLayout);
         LinearLayout MapLayout = findViewById(R.id.MapLayout);
-        ImageView imageView = findViewById(R.id.imageView);
-        ImageView imageView2 = findViewById(R.id.imageView2);
-        ImageView imageView3 = findViewById(R.id.imageView3);
+        ImageButton buttonHome = findViewById(R.id.buttonHome);
+        ImageButton buttonZayavka = findViewById(R.id.buttonZayavka);
+        ImageButton buttonMap = findViewById(R.id.buttonMap);
         // Получаем ссылку на ImageView
          // Устанавливаем цвет фильтра
         LinearLayout layoutRepair = findViewById(R.id.layoutRepair);
@@ -69,18 +71,63 @@ public class Osnovnaja extends AppCompatActivity {
         EditText editTextDistance = findViewById(R.id.editTextDistance);
         Button saveButton = findViewById(R.id.button6);
         String currentUserEmail = sp.getString("CurrentUserEmail", "");
+        RadioButton radioButtonHome = findViewById(R.id.Glavnaja);
+        RadioButton radioButtonZayavka = findViewById(R.id.Zajavka);
+        RadioButton radioButtonMap = findViewById(R.id.Karta);
 
-        imageView.setColorFilter(getResources().getColor(R.color.your_desired_color));
-        imageView2.setColorFilter(getResources().getColor(R.color.your_desired_color));
 
-        imageView3.setColorFilter(getResources().getColor(R.color.your_desired_color));
 // Получаем информацию о пользователе из Firestore
         // Получаем информацию о пользователе из Firestore
         // Получаем информацию о пользователе из Firestore
         TextView textViewCurrentUserEmail = findViewById(R.id.textViewCurrentUserEmail);
+        ImageButton imagebutton = findViewById(R.id.buttonimage);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         progressBar.setVisibility(View.VISIBLE);
         textViewCurrentUserEmail.setVisibility(View.GONE);
+        textViewCurrentUserEmail.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                // Переходим на активити "Вход"
+                Intent intent = new Intent(Osnovnaja.this, Profile.class);
+                startActivity(intent);
+
+            }
+        });
+        imagebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Osnovnaja.this, Profile.class);
+                startActivity(intent);
+            }
+        });
+        buttonHome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                radioButtonHome.setChecked(true);
+                radioButtonZayavka.setChecked(false);
+                radioButtonMap.setChecked(false);
+            }
+        });
+
+        buttonZayavka.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                radioButtonHome.setChecked(false);
+                radioButtonZayavka.setChecked(true);
+                radioButtonMap.setChecked(false);
+            }
+        });
+
+        buttonMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                radioButtonHome.setChecked(false);
+                radioButtonZayavka.setChecked(false);
+                radioButtonMap.setChecked(true);
+            }
+        });
         db.collection("users")
                 .whereEqualTo("email", currentUserEmail)
                 .get()
@@ -93,13 +140,39 @@ public class Osnovnaja extends AppCompatActivity {
                             String email = document.getString("email");
                             // Устанавливаем email пользователя в TextView
 
-                            textViewCurrentUserEmail.setText(email);
-                            progressBar.setVisibility(View.GONE);
-                            textViewCurrentUserEmail.setVisibility(View.VISIBLE); //
+
                         } else {
                             // Обработка ошибки или ситуации, когда не найден пользователь
                         }
                     }
+                });
+        // Получение ФИО текущего пользователя из базы данных
+        db.collection("userinfo")
+                .whereEqualTo("email", currentUserEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String familia = documentSnapshot.getString("familia");
+                            String imya = documentSnapshot.getString("imya");
+                            String otchestvo = documentSnapshot.getString("otchestvo");
+                            String number = documentSnapshot.getString("number");
+                            String currentUserFIO = familia + " " + imya + " " + otchestvo;
+
+
+                            // Установка ФИО пользователя в TextView
+                            textViewCurrentUserEmail.setText(imya);
+                            progressBar.setVisibility(View.GONE);
+                            textViewCurrentUserEmail.setVisibility(View.VISIBLE); //
+
+                        }
+                    } else {
+                        textViewCurrentUserEmail.setText("ФИО не найдено");
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Обработка ошибки
+                    textViewCurrentUserEmail.setText("Ошибка загрузки ФИО: " + e.getMessage());
                 });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -125,17 +198,12 @@ public class Osnovnaja extends AppCompatActivity {
                     // Показать раздел Заявки,
                     ZajavkaLayout.setVisibility(View.VISIBLE);
                     MapLayout.setVisibility(View.GONE);
-                    imageView.setColorFilter(getResources().getColor(R.color.your_desired_color));
-                    imageView2.setColorFilter(getResources().getColor(R.color.your_desired_color2));
 
-                    imageView3.setColorFilter(getResources().getColor(R.color.your_desired_color));
 
                 } else if (checkedId == R.id.Karta) {
                     MapLayout.setVisibility(View.VISIBLE);
                     ZajavkaLayout.setVisibility(View.GONE);
-                    imageView.setColorFilter(getResources().getColor(R.color.your_desired_color));
-                    imageView3.setColorFilter(getResources().getColor(R.color.your_desired_color2));
-                    imageView2.setColorFilter(getResources().getColor(R.color.your_desired_color));
+
                 }
                 else if (checkedId == R.id.Glavnaja) {
 

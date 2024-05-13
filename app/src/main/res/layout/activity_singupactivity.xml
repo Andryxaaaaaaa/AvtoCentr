@@ -6,89 +6,94 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".singupactivity"
-    android:background="#2FADE6">
+    android:background="@color/white">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/cardView"
-        android:layout_width="100dp"
-        android:layout_height="110dp"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="145dp"
-        android:layout_marginTop="60dp"
-        android:layout_marginEnd="145dp"
-        app:cardCornerRadius="20dp">
-        <ImageView
-            android:scaleX="3"
-            android:scaleY="3"
-            android:layout_marginTop="10dp"
-            android:layout_marginStart="13dp"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/tractor">
-
-        </ImageView>
-    </androidx.cardview.widget.CardView>
-
-    <EditText
-        android:id="@+id/editTextLogin"
-        android:layout_width="343dp"
-        android:layout_height="38dp"
-        android:layout_below="@+id/cardView"
+    <ImageView
+        android:id="@+id/Image"
+        android:layout_width="0dp"
+        android:layout_height="100dp"
+        android:layout_below="@+id/button2"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="45dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="45dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:backgroundTint="#E7E1E1"
-        android:gravity="center"
-        android:hint="Логин"
-        android:inputType="text" />
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="100dp"
+        android:scaleX="3"
+        android:scaleY="3"
+        android:src="@drawable/tractor">
 
-    <EditText
-        android:id="@+id/editTextPassword"
-        android:layout_width="343dp"
-        android:layout_height="38dp"
-        android:layout_below="@+id/editTextLogin"
+    </ImageView>
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="296dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/Image"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="45dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="45dp"
-        android:background="@drawable/rounded_edittext_bg"
-        android:backgroundTint="#E7E1E1"
         android:gravity="center"
-        android:hint="Пароль"
-        android:inputType="textPassword" />
+        android:text="Создайте аккаунт чтобы стать клиентом АвтоЦентр"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="343dp"
-        android:layout_height="100dp"
-        android:layout_below="@+id/editTextPassword"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="27dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginEnd="23dp"
-        android:background="@drawable/dlyabutton"
-        android:text="Создать пользователя"
-        android:textColor="#FFFFFF" />
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="343dp"
+    <EditText
+        android:id="@+id/editTextLogin"
+        android:layout_width="0dp"
         android:layout_height="38dp"
-        android:layout_below="@+id/button"
+        android:layout_below="@+id/textView3"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="25dp"
         android:layout_marginTop="100dp"
         android:layout_marginEnd="25dp"
-        android:background="@drawable/dlyabutton2"
-        android:text="Назад"
+        android:background="@drawable/rounded_edittext_bg"
+        android:backgroundTint="#E7E1E1"
+        android:gravity="center"
+        android:paddingStart="-12dp"
+        android:hint="Введите логин"
+        android:inputType="text" />
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_below="@+id/editTextLogin"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/rounded_edittext_bg"
+        android:backgroundTint="#E7E1E1"
+        android:gravity="center"
+        android:hint="Введите пароль"
+        android:inputType="textPassword" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="60dp"
+        android:background="@drawable/dlyabutton"
+        android:text="Продолжить"
         android:textColor="#FFFFFF" />
+
+    <ImageButton
+        android:id="@+id/button2"
+        android:layout_width="120px"
+        android:layout_height="120px"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/back" />
+
 
 </RelativeLayout>

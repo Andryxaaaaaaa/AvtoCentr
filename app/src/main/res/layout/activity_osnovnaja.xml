@@ -6,41 +6,115 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".Osnovnaja">
+
 
     <LinearLayout
         android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
+        android:orientation="horizontal"
+
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/buttonimage"
+            android:layout_width="75px"
+            android:layout_height="75px"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@drawable/profilicon"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/textViewCurrentUserEmail"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-
-            android:text=""
-            android:textSize="16dp"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:paddingTop="4dp"
+            android:paddingStart="5dp"
+            android:clickable="true"
+            android:text="123"
             android:textColor="@color/black"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <ProgressBar
             android:id="@+id/progressBar"
             android:layout_width="wrap_content"
-            android:visibility="gone"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="188dp"
-            android:layout_marginTop="284dp"
-            android:indeterminateTint="@color/white"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
 
+            android:paddingTop="9dp"
+            android:paddingStart="5dp"
+            android:visibility="gone"
+            android:indeterminateTint="@color/gray"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearButton"
+        android:layout_width="0dp"
+        android:layout_height="25dp"
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+        <ImageButton
+            android:id="@+id/buttonHome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/home"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="1"
+            android:background="@color/white"
+            android:layout_marginStart="0dp"
+            />
+
+        <ImageButton
+            android:id="@+id/buttonZayavka"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/zajavka"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+             />
+
+        <ImageButton
+            android:id="@+id/buttonMap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitCenter"
+            android:adjustViewBounds="true"
+            android:src="@drawable/maaap"
+            android:background="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            />
+
+
+    </LinearLayout>
+
+
+
     <LinearLayout
         android:id="@+id/MapLayout"
         android:layout_width="411dp"
@@ -48,10 +122,9 @@
         android:orientation="vertical"
         android:visibility="gone"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="0.0">
@@ -59,7 +132,6 @@
                 android:id="@+id/editTextLocation"
                 android:layout_width="343dp"
                 android:layout_height="38dp"
-
                 android:layout_marginBottom="8dp"
                 android:hint="Введите населенный пункт"
                 android:inputType="text"
@@ -70,12 +142,10 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp" />
-
             <EditText
                 android:id="@+id/editTextDistance"
                 android:layout_width="343dp"
                 android:layout_height="38dp"
-
                 android:layout_marginBottom="8dp"
                 android:hint="Введите количество километров"
                 android:background="@drawable/rounded_edittext_bg"
@@ -86,21 +156,17 @@
                 android:layout_marginTop="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp" />
-
         <Button
             android:id="@+id/button6"
             android:layout_width="215dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="400dp"
             android:layout_marginStart="80dp"
-
             android:background="@drawable/dlyabutton"
-
             android:text="Сохранить данные"
             android:textColor="#FFFFFF"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/textView2"
             android:layout_width="365dp"
@@ -109,46 +175,40 @@
             android:text="Пожалуйста, узнайте сколько километров составляет маршрут от АвтоЦентр Оренбург до вашего местоположения и введите Населенный пункт и количество километров в соответствующие окна и нажмите кноку сохранить"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-
-
     </LinearLayout>
+
+
+
+
+
 
     <LinearLayout
         android:id="@+id/ZajavkaLayout"
-
         android:layout_width="411dp"
         android:layout_height="610dp"
         android:orientation="vertical"
         android:visibility="gone"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/linearButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="0.0">
-
-
         <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-
             <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
                 <!-- Верхний раздел для выбора между "Техобслуживание" и "Ремонт" -->
-
                 <!-- EditText для раздела "Техобслуживание" -->
-
                 <RadioGroup
                     android:id="@+id/radioGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:padding="16dp">
-
                     <RadioButton
                         android:id="@+id/radioMaintenance"
                         android:layout_width="wrap_content"
@@ -157,10 +217,8 @@
                         android:background="@drawable/custom_radio_button"
                         android:button="@null"
                         android:gravity="center"
-
                         android:textAppearance="@style/RadioButtonTextStyle"
                         android:textColor="@color/radio_button_text_color"/>
-
                     <RadioButton
                         android:id="@+id/radioRepair"
                         android:layout_width="wrap_content"
@@ -170,11 +228,10 @@
                         android:background="@drawable/custom_radio_button"
                         android:button="@null"
                         android:gravity="center"
-
                         android:textAppearance="@style/RadioButtonTextStyle"
                         android:textColor="@color/radio_button_text_color"/>
-
                 </RadioGroup>
+
 
 
                 <LinearLayout
@@ -383,103 +440,54 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
+
+
+    <RadioGroup
+        android:id="@+id/radioGroup2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_gravity="center_horizontal"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/Glavnaja"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            android:layout_weight="1"
+            android:background="@drawable/custom_radio_button"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Главная"
+            android:textAppearance="@style/RadioButtonTextStyle"
+            android:textColor="@color/radio_button_text_color" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="40dp"
-                android:layout_marginEnd="53dp"
-                android:src="@drawable/home" />
-
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="43dp"
-                android:layout_marginEnd="35dp"
-                android:src="@drawable/zajavka" />
-
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginStart="64dp"
-                android:layout_marginEnd="35dp"
-                android:src="@drawable/maaap" />
-        </LinearLayout>
-
-
-        <RadioGroup
-            android:id="@+id/radioGroup2"
-            android:layout_width="match_parent"
+        <RadioButton
+            android:id="@+id/Zajavka"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:orientation="horizontal">
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_radio_button"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Заявки"
+            android:textAppearance="@style/RadioButtonTextStyle"
+            android:textColor="@color/radio_button_text_color" />
 
-            <RadioButton
-                android:id="@+id/Glavnaja"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/custom_radio_button"
-                android:button="@null"
-                android:gravity="center"
-                android:text="Главная"
-                android:textAppearance="@style/RadioButtonTextStyle"
-                android:textColor="@color/radio_button_text_color" />
+        <RadioButton
+            android:id="@+id/Karta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:background="@drawable/custom_radio_button"
+            android:button="@null"
+            android:gravity="center"
+            android:text="Карта"
+            android:textAppearance="@style/RadioButtonTextStyle"
+            android:textColor="@color/radio_button_text_color" />
 
-            <RadioButton
-                android:id="@+id/Zajavka"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_radio_button"
-                android:button="@null"
-                android:gravity="center"
-                android:text="Заявки"
-                android:textAppearance="@style/RadioButtonTextStyle"
-                android:textColor="@color/radio_button_text_color" />
-
-            <RadioButton
-                android:id="@+id/Karta"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_weight="1"
-                android:background="@drawable/custom_radio_button"
-                android:button="@null"
-                android:gravity="center"
-                android:text="Карта"
-                android:textAppearance="@style/RadioButtonTextStyle"
-                android:textColor="@color/radio_button_text_color" />
-
-        </RadioGroup>
-
-    </LinearLayout>
+    </RadioGroup>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

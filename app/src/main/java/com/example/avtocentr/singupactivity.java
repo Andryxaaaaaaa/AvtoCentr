@@ -4,8 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,7 +43,7 @@ public class singupactivity extends AppCompatActivity {
         TextView email = findViewById(R.id.editTextLogin);
         TextView password = findViewById(R.id.editTextPassword);
         Button button = findViewById(R.id.button);
-        Button button2 = findViewById(R.id.button2);
+        ImageButton button2 = findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -70,9 +72,7 @@ public class singupactivity extends AppCompatActivity {
                 else {
                     FirebaseFirestore db = FirebaseFirestore.getInstance();
                     // Create a new user with a first and last name
-                    Map<String, Object> user = new HashMap<>();
-                    user.put("email", email.getText().toString());
-                    user.put("password", password.getText().toString());
+
 
 
 // Проверка наличия пользователя с таким email
@@ -86,32 +86,74 @@ public class singupactivity extends AppCompatActivity {
                                         // Если найден пользователь с таким email, выводим сообщение об ошибке
                                         Toast.makeText(singupactivity.this, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show();
                                     } else {
-                                        sp.edit().putString("Email", email.getText().toString()).commit();
+                                        // Создаем нового пользователя
+                                        Map<String, Object> user = new HashMap<>();
+                                        user.put("email", email.getText().toString());
+                                        user.put("password", password.getText().toString());
 
-                                        // Создаем новый документ в коллекции "map" с данными пользователя и пустыми значениями "km" и "mappoint"
-                                        Map<String, Object> mapData = new HashMap<>();
-                                        mapData.put("user", email.getText().toString()); // Используем ID документа пользователя в качестве идентификатора пользователя
-                                        mapData.put("km", ""); // Пустое значение для km
-                                        mapData.put("mappoint", ""); // Пустое значение для mappoint
-
-                                        db.collection("map")
-                                                .add(mapData)
+                                        // Добавляем пользователя в коллекцию "users"
+                                        db.collection("users")
+                                                .add(user)
                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                     @Override
                                                     public void onSuccess(DocumentReference documentReference) {
-                                                        // После успешного создания документа в коллекции "map" переходим на главный экран
-                                                        startActivity(new Intent(singupactivity.this, Osnovnaja.class));
+                                                        // После успешного создания пользователя, создаем новый документ в коллекции "map"
+                                                        Map<String, Object> mapData = new HashMap<>();
+                                                        mapData.put("user", email.getText().toString()); // Используем ID документа пользователя в качестве идентификатора пользователя
+                                                        mapData.put("km", ""); // Пустое значение для km
+                                                        mapData.put("mappoint", ""); // Пустое значение для mappoint
+
+                                                        db.collection("map")
+                                                                .add(mapData)
+                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                    @Override
+                                                                    public void onSuccess(DocumentReference documentReference) {
+                                                                        // После успешного создания документа в коллекции "map" переходим на главный экран
+                                                                        sp.edit().putString("CurrentUserEmail", email.getText().toString()).apply();
+                                                                        startActivity(new Intent(singupactivity.this, SignFIO.class));
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        Toast.makeText(singupactivity.this, "Не удалось создать документ в коллекции 'map'", Toast.LENGTH_LONG).show();
+                                                                    }
+                                                                });
+                                                        Map<String, Object> userInfo = new HashMap<>();
+                                                        userInfo.put("email", email.getText().toString()); // Email пользователя
+                                                        userInfo.put("familia", ""); // Пустое значение для фамилии
+                                                        userInfo.put("imya", ""); // Пустое значение для имени
+                                                        userInfo.put("otchestvo", ""); // Пустое значение для отчества
+                                                        userInfo.put("number", ""); // Пустое значение для номера телефона
+
+                                                        db.collection("userinfo")
+                                                                .add(userInfo)
+                                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                                    @Override
+                                                                    public void onSuccess(DocumentReference documentReference) {
+                                                                        // Document created successfully
+                                                                        Log.d("UserInfo", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                                                        startActivity(new Intent(singupactivity.this, SignFIO.class));
+                                                                    }
+                                                                })
+                                                                .addOnFailureListener(new OnFailureListener() {
+                                                                    @Override
+                                                                    public void onFailure(@NonNull Exception e) {
+                                                                        // Failed to create document
+                                                                        Toast.makeText(singupactivity.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
+                                                                        Log.e("UserInfo", "Error adding document", e);
+                                                                    }
+                                                                });
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(@NonNull Exception e) {
-                                                        Toast.makeText(singupactivity.this, "Не удалось создать документ в коллекции 'map'", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(singupactivity.this, "Не удалось создать пользователя", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
                                     }
                                 }
-
                             })
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override

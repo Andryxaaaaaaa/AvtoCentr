@@ -42,6 +42,20 @@
         android:background="@drawable/back"/>
 
     <ImageView
+        android:id="@+id/Iamge2"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="125dp"
+        android:layout_marginTop="25dp"
+        android:src="@drawable/logoti"
+        app:layout_constraintBottom_toTopOf="@+id/textViewВыйтиИзАккаунта"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAdres" />
+
+    <ImageView
         android:id="@+id/ImageZajavka"
         android:layout_width="70px"
         android:layout_height="70px"

@@ -11,15 +11,16 @@
     <ImageView
         android:id="@+id/Image"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:layout_below="@+id/button2"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="100dp"
-        android:scaleX="3"
-        android:scaleY="3"
-        android:src="@drawable/tractor">
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="10dp"
+        android:scaleX="1"
+        android:scaleY="1"
+        android:src="@drawable/logoti">
 
     </ImageView>
 
@@ -31,7 +32,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="45dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="45dp"
         android:gravity="center"
         android:text="Создайте аккаунт чтобы стать клиентом АвтоЦентр"

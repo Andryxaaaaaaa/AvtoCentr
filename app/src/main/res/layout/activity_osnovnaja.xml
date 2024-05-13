@@ -114,78 +114,123 @@
     </LinearLayout>
 
 
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/MapLayout"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:orientation="vertical"
+    android:visibility="gone"
+    android:padding="16dp"
+    app:layout_constraintBottom_toTopOf="@+id/linearButton"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintHorizontal_bias="0.0"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+    app:layout_constraintVertical_bias="0.0">
 
-    <LinearLayout
-        android:id="@+id/MapLayout"
-        android:layout_width="411dp"
-        android:layout_height="610dp"
-        android:orientation="vertical"
-        android:visibility="gone"
-        android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@+id/linearButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:layout_constraintVertical_bias="0.0">
             <EditText
                 android:id="@+id/editTextLocation"
-                android:layout_width="343dp"
+                android:layout_width="0dp"
                 android:layout_height="38dp"
                 android:layout_marginBottom="8dp"
                 android:hint="Введите населенный пункт"
                 android:inputType="text"
+                android:paddingStart="8dp"
                 android:background="@drawable/rounded_edittext_bg"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp" />
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp" />
             <EditText
                 android:id="@+id/editTextDistance"
-                android:layout_width="343dp"
+                android:layout_width="0dp"
                 android:layout_height="38dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="20dp"
+                android:paddingStart="8dp"
                 android:hint="Введите количество километров"
                 android:background="@drawable/rounded_edittext_bg"
                 android:inputType="numberDecimal"
                 app:layout_constraintTop_toBottomOf="@+id/editTextLocation"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginTop="16dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp" />
-        <Button
-            android:id="@+id/button6"
-            android:layout_width="215dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="400dp"
-            android:layout_marginStart="80dp"
-            android:background="@drawable/dlyabutton"
-            android:text="Сохранить данные"
-            android:textColor="#FFFFFF"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp" />
+
+    <Button
+        android:id="@+id/button6"
+        android:layout_width="0dp"
+        android:layout_height="38dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:background="@drawable/dlyabutton"
+        android:text="Сохранить данные"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="365dp"
+        android:layout_height="88dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="25dp"
+        android:layout_marginBottom="20dp"
+
+        android:text="Пожалуйста, узнайте сколько километров составляет маршрут от АвтоЦентр Оренбург до вашего местоположения и введите Населенный пункт и количество километров в соответствующие окна и нажмите кноку сохранить"
+        app:layout_constraintBottom_toTopOf="@+id/button6"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/HomeLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/linearButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintVertical_bias="0.0">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="365dp"
-            android:layout_height="88dp"
-            android:layout_marginTop="-200dp"
-            android:text="Пожалуйста, узнайте сколько километров составляет маршрут от АвтоЦентр Оренбург до вашего местоположения и введите Населенный пункт и количество километров в соответствующие окна и нажмите кноку сохранить"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </LinearLayout>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <LinearLayout
+                    android:id="@+id/detailsContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp" />
+
+            </ScrollView>
+        </RelativeLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 
-
-
-
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ZajavkaLayout"
-        android:layout_width="411dp"
-        android:layout_height="610dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:orientation="vertical"
         android:visibility="gone"
         android:padding="16dp"
@@ -195,10 +240,10 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="0.0">
-        <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
                 <!-- Верхний раздел для выбора между "Техобслуживание" и "Ремонт" -->
@@ -215,6 +260,7 @@
                         android:layout_height="wrap_content"
                         android:text="Техобслуживание"
                         android:background="@drawable/custom_radio_button"
+                        android:textSize="16dp"
                         android:button="@null"
                         android:gravity="center"
                         android:textAppearance="@style/RadioButtonTextStyle"
@@ -223,6 +269,7 @@
                         android:id="@+id/radioRepair"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textSize="16dp"
                         android:layout_marginStart="16dp"
                         android:text="Ремонт"
                         android:background="@drawable/custom_radio_button"
@@ -233,16 +280,15 @@
                 </RadioGroup>
 
 
-
                 <LinearLayout
                     android:id="@+id/layoutMaintenance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/radioGroup"
                     android:orientation="vertical"
+                    android:visibility="gone"
 
-                    android:padding="16dp"
-                    android:visibility="gone">
+                    android:padding="16dp">
 
                     <!-- Поместите здесь ваши EditText для раздела "Техобслуживание" -->
                     <!-- Пример: -->
@@ -280,7 +326,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Место выезда"/>
+                        android:hint="Место выезда" />
 
                     <EditText
                         android:id="@+id/editText5"
@@ -300,7 +346,9 @@
                         android:layout_margin="16dp"
                         android:background="@drawable/dlyabutton"
                         android:text="Отправить заявку"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white"
+                        tools:layout_editor_absoluteX="32dp"
+                        tools:layout_editor_absoluteY="159dp" />
 
 
                     <!-- Добавьте другие EditText по аналогии -->
@@ -419,6 +467,38 @@
                         android:layout_marginBottom="8dp"
                         android:background="@drawable/rounded_edittext_bg"
                         android:hint="Прочее" />
+                    <EditText
+                        android:id="@+id/editText27"
+                        android:layout_width="343dp"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:hint="Прочее" />
+                    <EditText
+                        android:id="@+id/editText28"
+                        android:layout_width="343dp"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:hint="Прочее" />
+                    <EditText
+                        android:id="@+id/editText29"
+                        android:layout_width="343dp"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:hint="Прочее" />
+                    <EditText
+                        android:id="@+id/editText30"
+                        android:layout_width="343dp"
+                        android:layout_height="38dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:hint="Прочее" />
                     <!-- Кнопка "Отправить" -->
                     <Button
                         android:id="@+id/button5"
@@ -438,7 +518,7 @@
             </RelativeLayout>
         </ScrollView>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 

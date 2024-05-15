@@ -51,6 +51,7 @@ dependencies {
     implementation(libs.annotation)
     implementation ("com.sun.mail","android-mail","1.6.7")
     implementation ("com.sun.mail","android-activation","1.6.7")
+    implementation ("org.jsoup:jsoup:1.14.3")
     implementation ("androidx.cardview:cardview:1.0.0")
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)

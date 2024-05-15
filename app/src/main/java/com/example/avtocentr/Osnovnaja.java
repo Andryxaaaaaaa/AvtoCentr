@@ -1,11 +1,26 @@
 package com.example.avtocentr;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.Typeface;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -16,36 +31,122 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Properties;
+
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.PasswordAuthentication;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 public class Osnovnaja extends AppCompatActivity {
 
     // Код запроса для обратного вызова
     private static final int REQUEST_PICK_LOCATION = 1;
     // Код запроса для разрешения доступа к местоположению
-    static final int REQUEST_LOCATION_PERMISSION = 2;
+    static final int REQUEST_LOCATION_PERMISSION = 1;
+
+    private static final int UPDATE_INTERVAL = 600000; // 10 seconds
+    private static final String TAG = "MapActivity";
+    private WebView webView;
+    private TextView distanceTextView;
+    private AutoCompleteTextView autoCompleteTextView;
+    private FirebaseFirestore db;
+    private Handler handler = new Handler();
+    double currentLatitude;
+    double currentLongitude;
+    private EditText t1;
+    private EditText t2;
+    private EditText t3;
+    private EditText t4;
+    private EditText t5;
+    private EditText t6;
+    private EditText t7;
+    private EditText t8;
+    private EditText t9;
+    private EditText t10;
+    private EditText t11;
+    private EditText t12;
+    private EditText t13;
+    private EditText t14;
+    private EditText t15;
+    private EditText t16;
+    private EditText t17;
+    private EditText t18;
+    private EditText t19;
+    private EditText t20;
+    private EditText t21;
+    private EditText t22;
+    private EditText d1;
+    private EditText d2;
+    private EditText d3;
+    private EditText d4;
+    private EditText d5;
+    private EditText d6;
+    private EditText d7;
+    private EditText d8;
+    private EditText d9;
+    private EditText d10;
+    private EditText d11;
+    private EditText d12;
+    private EditText d13;
+    private EditText d14;
+    private EditText d15;
+    private EditText d16;
+    private EditText d17;
+    private EditText d18;
+    private EditText d19;
+    private EditText d20;
+    private EditText d21;
+    private EditText d22;
+    String currentUserFIO;
+    String currentUserEmail;
+    String km;
+    String mappoint;
 
     // Ссылка на TextView
-    private TextView distanceTextView;
+
 
     // Firestore объект
-    private FirebaseFirestore db;
 
     // Контейнер для дополнительной информации
     private LinearLayout detailsContainer;
@@ -69,9 +170,9 @@ public class Osnovnaja extends AppCompatActivity {
         ImageButton buttonZayavka = findViewById(R.id.buttonZayavka);
         ImageButton buttonMap = findViewById(R.id.buttonMap);
         LinearLayout layoutRepair = findViewById(R.id.layoutRepair);
-        EditText editTextLocation = findViewById(R.id.editTextLocation);
-        EditText editTextDistance = findViewById(R.id.editTextDistance);
-        Button saveButton = findViewById(R.id.button6);
+        webView = findViewById(R.id.webView);
+        distanceTextView = findViewById(R.id.distanceTextView);
+        autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
         RadioButton radioButtonHome = findViewById(R.id.Glavnaja);
         RadioButton radioButtonZayavka = findViewById(R.id.Zajavka);
         RadioButton radioButtonMap = findViewById(R.id.Karta);
@@ -79,6 +180,168 @@ public class Osnovnaja extends AppCompatActivity {
         ImageButton imagebutton = findViewById(R.id.buttonimage);
         ProgressBar progressBar = findViewById(R.id.progressBar);
         detailsContainer = findViewById(R.id.detailsContainer);
+        RadioButton radioMaintenance = findViewById(R.id.radioMaintenance);
+        t1 = findViewById(R.id.editText111);
+        t2 = findViewById(R.id.editText112);
+        t3 = findViewById(R.id.editText113);
+        t4 = findViewById(R.id.editText114);
+        t5 = findViewById(R.id.editText115);
+        t6 = findViewById(R.id.editText116);
+        t7 = findViewById(R.id.editText117);
+        t8 = findViewById(R.id.editText118);
+        t9 = findViewById(R.id.editText119);
+        t10 = findViewById(R.id.editText120);
+        t11 = findViewById(R.id.editText121);
+        t12 = findViewById(R.id.editText122);
+        t13 = findViewById(R.id.editText123);
+        t14 = findViewById(R.id.editText124);
+        t15 = findViewById(R.id.editText125);
+        t16 = findViewById(R.id.editText126);
+        t17 = findViewById(R.id.editText127);
+        t18 = findViewById(R.id.editText128);
+        t19 = findViewById(R.id.editText129);
+        t20 = findViewById(R.id.editText130);
+        t21 = findViewById(R.id.editText131);
+        t22 = findViewById(R.id.editText132);
+        d1 = findViewById(R.id.editText222);
+        d2 = findViewById(R.id.editText222);
+        d3 = findViewById(R.id.editText223);
+        d4 = findViewById(R.id.editText224);
+        d5 = findViewById(R.id.editText225);
+        d6 = findViewById(R.id.editText226);
+        d7 = findViewById(R.id.editText227);
+        d8 = findViewById(R.id.editText228);
+        d9 = findViewById(R.id.editText229);
+        d10 = findViewById(R.id.editText230);
+        d11 = findViewById(R.id.editText231);
+        d12 = findViewById(R.id.editText232);
+        d13 = findViewById(R.id.editText233);
+        d14 = findViewById(R.id.editText234);
+        d15 = findViewById(R.id.editText235);
+        d16 = findViewById(R.id.editText236);
+        d17 = findViewById(R.id.editText237);
+        d18 = findViewById(R.id.editText238);
+        d19 = findViewById(R.id.editText239);
+        d20 = findViewById(R.id.editText240);
+        d21 = findViewById(R.id.editText241);
+        d22 = findViewById(R.id.editText242);
+        db.collection("userinfo")
+                .whereEqualTo("email", currentUserEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String familia = documentSnapshot.getString("familia");
+                            String imya = documentSnapshot.getString("imya");
+                            String otchestvo = documentSnapshot.getString("otchestvo");
+                            String number = documentSnapshot.getString("number");
+                            currentUserFIO = familia + " " + imya + " " + otchestvo;
+                        }
+                    } else {
+
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Обработка ошибки
+
+                });
+        db.collection("map")
+                .whereEqualTo("email", currentUserEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String mappoint = documentSnapshot.getString("mappoint");
+                            String km = documentSnapshot.getString("km");
+                        }
+                    } else {
+
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    // Обработка ошибки
+
+                });
+        Button button = findViewById(R.id.button4);
+        Button button2 = findViewById(R.id.button5);
+        // Создаем новый поток для сетевой операции
+        new Thread(() -> {
+
+            try {
+
+                // Выводим результат на экран с использованием UI-потока
+
+                button.setOnClickListener(v -> {
+                    String message = "Сообщение\n Заявка на Техническое Обслуживание " + "\n" +
+                            "ФИО: " + currentUserFIO + "\n" +
+                            "Адрес: "+ mappoint + "\n" +
+                            "Километры: "+ km + "\n" +
+                            "Наша организация " +                                                                   d1.getText().toString() + "\n" +
+                            "Наименование изделия " +                                                               d2 .getText().toString()+ "\n" +
+                            "Дата приобретения " +                                                                  d3.getText().toString() + "\n" +
+                            "№ товарной накладной " +                                                               d4.getText().toString() + "\n" +
+                            "Модель техники (оборудования) " +                                                      d5.getText().toString() + "\n" +
+                            "Серийный номер техники (оборудования) " +                                              d6.getText().toString() + "\n" +
+                            "Дата ввода в эксплуатацию " +                                                          d7.getText().toString() + "\n" +
+                            "Кол-во отработанных часов " +                                                          d8.getText().toString() + "\n" +
+                            "Модель двигателя " +                                                                   d9.getText().toString() + "\n" +
+                            "Серийный номер двигателя " +                                                           d10.getText().toString() + "\n" +
+                            "Дата реализации техники (оборудования) " +                                             d11.getText().toString() + "\n" +
+                            "Владелец техники (об-ния) " +                                                          d12.getText().toString() + "\n" +
+                            "Адрес владельца " +                                                                    d13.getText().toString() + "\n" +
+                            "Область владельца " +                                                                  d14.getText().toString() + "\n" +
+                            "Район владельца " +                                                                    d15.getText().toString() + "\n" +
+                            "Адрес места эксплуатации / места проведения ремонта " +                                d16.getText().toString() + "\n" +
+                            "Область места эксплуатации " +                                                         d17.getText().toString() + "\n" +
+                            "Район места эксплуатации " +                                                           d18.getText().toString() + "\n" +
+                            "Расстояние от технического центра до места проведения ремонта (туда и обратно), км " + d19.getText().toString() + "\n" +
+                            "Наименование дефектного изделия " +                                                    d20.getText().toString() + "\n" +
+                            "Предварительная причина поломки (выявленный недостаток) " +                            d21.getText().toString() + "\n";
+
+
+                    new Thread(() -> sendMail("kaltaevaangelina@mail.ru" ,  message)).start();
+                    new Thread(() -> sendTO()).start();
+                });
+                button2.setOnClickListener(v -> {
+                    String message = "Сообщение\n Заявка на Ремонт " + "\n" +
+                            "ФИО: " + currentUserFIO + "\n" +
+                            "Адрес: "+ mappoint + "\n" +
+                            "Километры: "+ km + "\n" +
+                            "Наша организация " +                                                                   t1.getText().toString() + "\n" +
+                            "Наименование изделия " +                                                               t2.getText().toString() + "\n" +
+                            "Дата приобретения " +                                                                  t3.getText().toString() + "\n" +
+                            "№ товарной накладной " +                                                               t4.getText().toString() + "\n" +
+                            "Модель техники (оборудования) " +                                                      t5.getText().toString() + "\n" +
+                            "Серийный номер техники (оборудования) " +                                              t6.getText().toString() + "\n" +
+                            "Дата ввода в эксплуатацию " +                                                          t7.getText().toString() + "\n" +
+                            "Кол-во отработанных часов " +                                                          t8.getText().toString() + "\n" +
+                            "Модель двигателя " +                                                                   t9.getText().toString() + "\n" +
+                            "Серийный номер двигателя " +                                                           t11.getText().toString() + "\n" +
+                            "Дата реализации техники (оборудования) " +                                             t12.getText().toString() + "\n" +
+                            "Владелец техники (об-ния) " +                                                          t13.getText().toString() + "\n" +
+                            "Адрес владельца " +                                                                    t14.getText().toString() + "\n" +
+                            "Область владельца " +                                                                  t15.getText().toString() + "\n" +
+                            "Район владельца " +                                                                    t16.getText().toString() + "\n" +
+                            "Адрес места эксплуатации / места проведения ремонта " +                                t17.getText().toString() + "\n" +
+                            "Область места эксплуатации " +                                                         t18.getText().toString() + "\n" +
+                            "Район места эксплуатации " +                                                           t19.getText().toString() + "\n" +
+                            "Расстояние от технического центра до места проведения ремонта (туда и обратно), км " + t20.getText().toString() + "\n" +
+                            "Наименование дефектного изделия " +                                                    t21.getText().toString() + "\n" +
+                            "Предварительная причина поломки (выявленный недостаток) " +                            t22.getText().toString() + "\n";
+
+                    new Thread(() -> sendMail("kaltaevaangelina@mail.ru" ,  message)).start();
+                    new Thread(() -> sendRemont()).start();
+                });
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                // Выводим сообщение об ошибке на экран с использованием UI-потока
+                new Handler(Looper.getMainLooper()).post(() ->
+                        Toast.makeText(Osnovnaja.this, "Ошибка при чтении почты", Toast.LENGTH_LONG).show());
+            }
+        }).start();
+
 
         // Отображение прогресса и скрытие текста о текущем пользователе
         progressBar.setVisibility(View.VISIBLE);
@@ -95,24 +358,38 @@ public class Osnovnaja extends AppCompatActivity {
             Intent intent = new Intent(Osnovnaja.this, Profile.class);
             startActivity(intent);
         });
-
+        buttonHome.setColorFilter(Color.parseColor("#0097ED"));
+        buttonZayavka.setColorFilter(Color.parseColor("#656565"));
+        buttonMap.setColorFilter(Color.parseColor("#656565"));
+        radioButtonHome.setChecked(true);
         // Обработчики клика по кнопкам навигации
         buttonHome.setOnClickListener(v -> {
             radioButtonHome.setChecked(true);
             radioButtonZayavka.setChecked(false);
             radioButtonMap.setChecked(false);
+            buttonHome.setColorFilter(Color.parseColor("#0097ED"));
+            buttonZayavka.setColorFilter(Color.parseColor("#656565"));
+            buttonMap.setColorFilter(Color.parseColor("#656565"));
         });
 
         buttonZayavka.setOnClickListener(v -> {
+            radioMaintenance.setChecked(true);
             radioButtonHome.setChecked(false);
             radioButtonZayavka.setChecked(true);
             radioButtonMap.setChecked(false);
+            buttonZayavka.setColorFilter(Color.parseColor("#0097ED"));
+            buttonMap.setColorFilter(Color.parseColor("#656565"));
+            buttonHome.setColorFilter(Color.parseColor("#656565"));
         });
 
         buttonMap.setOnClickListener(v -> {
             radioButtonHome.setChecked(false);
             radioButtonZayavka.setChecked(false);
             radioButtonMap.setChecked(true);
+            buttonMap.setColorFilter(Color.parseColor("#0097ED"));
+            buttonZayavka.setColorFilter(Color.parseColor("#656565"));
+            buttonHome.setColorFilter(Color.parseColor("#656565"));
+
         });
 
         // Получение текущего пользователя из SharedPreferences
@@ -160,46 +437,32 @@ public class Osnovnaja extends AppCompatActivity {
         // Обработчик выбора в RadioGroup 2
         radioGroup2.setOnCheckedChangeListener((group, checkedId) -> {
             if (checkedId == R.id.Zajavka) {
+                // Устанавливаем радиокнопку Техобслуживание в состояние "нажато"
+                radioMaintenance.setChecked(true);
+
                 ZajavkaLayout.setVisibility(View.VISIBLE);
                 MapLayout.setVisibility(View.GONE);
                 HomeLayout.setVisibility(View.GONE);
+                buttonZayavka.setColorFilter(Color.parseColor("#0097ED"));
+                buttonMap.setColorFilter(Color.parseColor("#656565"));
+                buttonHome.setColorFilter(Color.parseColor("#656565"));
             } else if (checkedId == R.id.Karta) {
                 MapLayout.setVisibility(View.VISIBLE);
                 ZajavkaLayout.setVisibility(View.GONE);
                 HomeLayout.setVisibility(View.GONE);
+                buttonMap.setColorFilter(Color.parseColor("#0097ED"));
+                buttonZayavka.setColorFilter(Color.parseColor("#656565"));
+                buttonHome.setColorFilter(Color.parseColor("#656565"));
             } else if (checkedId == R.id.Glavnaja) {
                 MapLayout.setVisibility(View.GONE);
                 ZajavkaLayout.setVisibility(View.GONE);
                 HomeLayout.setVisibility(View.VISIBLE);
+                buttonHome.setColorFilter(Color.parseColor("#0097ED"));
+                buttonZayavka.setColorFilter(Color.parseColor("#656565"));
+                buttonMap.setColorFilter(Color.parseColor("#656565"));
             }
         });
 
-        // Обработчик нажатия кнопки сохранения
-        saveButton.setOnClickListener(view -> {
-            if (editTextLocation.getText().toString().isEmpty() || editTextDistance.getText().toString().isEmpty()) {
-                Toast.makeText(getApplicationContext(), "Проверьте поля!", Toast.LENGTH_LONG).show();
-            } else {
-                // Проверка наличия документа с данными пользователя
-                db.collection("map")
-                        .whereEqualTo("user", currentUserEmail)
-                        .get()
-                        .addOnSuccessListener(queryDocumentSnapshots -> {
-                            for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                String documentId = documentSnapshot.getId();
-                                // Обновление существующего документа
-                                Map<String, Object> mapData = new HashMap<>();
-                                mapData.put("mappoint", editTextLocation.getText().toString());
-                                mapData.put("km", editTextDistance.getText().toString());
-                                mapData.put("user", currentUserEmail);
-                                db.collection("map").document(documentId).update(mapData)
-                                        .addOnSuccessListener(aVoid -> Toast.makeText(Osnovnaja.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show())
-                                        .addOnFailureListener(e -> Toast.makeText(Osnovnaja.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show());
-                                // Если найден документ, соответствующий текущему пользователю, выходим из цикла
-                                break;
-                            }
-                        });
-            }
-        });
 
         // Проверка наличия разрешения на доступ к местоположению
         if (ContextCompat.checkSelfPermission(this,
@@ -214,6 +477,396 @@ public class Osnovnaja extends AppCompatActivity {
 
         // Загрузка информации из Firestore
         loadDetailsFromFirestore();
+        webView = findViewById(R.id.webView);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        db = FirebaseFirestore.getInstance();
+        distanceTextView = findViewById(R.id.distanceTextView);
+        autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Этот метод вызывается перед тем, как текст изменится
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Этот метод вызывается при изменении текста
+                // Отправляем запрос на поиск местоположений при изменении текста
+                searchLocation(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Этот метод вызывается после того, как текст изменится
+            }
+        });
+        // Проверяем разрешение на доступ к геолокации
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Запрашиваем разрешение на доступ к геолокации
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        } else {
+            // Разрешение уже получено, получаем текущее местоположение пользователя
+            getLocation();
+        }
+
+    }
+    private void sendMail(String recipient,  String body) {
+        final String username = "santa5435@mail.ru"; // Ваша почта
+        final String password = "TdXP5DNNc9pTFrdAmNqW"; // Пароль от почты
+
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.mail.ru");; // SMTP-сервер, замените на нужный вам
+        props.put("mail.smtp.port", "2525"); // Порт SMTP-сервера, может отличаться в зависимости от почтового провайдера
+        props.put("mail.smtp.ssl.trust", "*");
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
+
+        try {
+            Log.d(TAG, "Trying to send email...");
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+
+            message.setText(body);
+
+            Transport.send(message);
+
+            Log.d(TAG, "Email sent successfully");
+
+        } catch (MessagingException e) {
+            Log.e(TAG, "Failed to send email", e);
+            throw new RuntimeException(e);
+        } finally {
+            Log.d(TAG, "End of sendMail()");
+        }
+    }
+    private void sendRemont() {
+        Map<String, Object> zayavkaData = new HashMap<>();
+        zayavkaData.put("Наша организация" ,  d1.getText().toString());
+        zayavkaData.put("Наименование изделия",  d2.getText().toString());
+        zayavkaData.put("Дата приобретения" ,  d3.getText().toString());
+        zayavkaData.put("№ товарной накладной",  d4.getText().toString());
+        zayavkaData.put("Модель техники (оборудования)",  d5.getText().toString());
+        zayavkaData.put("Серийный номер техники (оборудования)",  d6.getText().toString());
+        zayavkaData.put("Дата ввода в эксплуатацию",  d7.getText().toString());
+        zayavkaData.put("Кол-во отработанных часов",  d8.getText().toString());
+        zayavkaData.put("Модель двигателя ",  d9.getText().toString());
+        zayavkaData.put("Владелец компании", d10.getText().toString());
+        zayavkaData.put("Серийный номер двигателя ", d11.getText().toString());
+        zayavkaData.put("Дата реализации техники (оборудования)", d12.getText().toString());
+        zayavkaData.put("Владелец техники (об-ния) ", d13.getText().toString());
+        zayavkaData.put("Адрес владельца ", d14.getText().toString());
+        zayavkaData.put("Область владельца", d15.getText().toString());
+        zayavkaData.put("Район владельца ", d16.getText().toString());
+        zayavkaData.put("Адрес места эксплуатации / места проведения ремонта ", d17.getText().toString());
+        zayavkaData.put("Область места эксплуатации ", d18.getText().toString());
+        zayavkaData.put("Район места эксплуатации ", d19.getText().toString());
+        zayavkaData.put("Расстояние от технического центра до места проведения ремонта (туда и обратно), км ", d20.getText().toString());
+        zayavkaData.put("Наименование дефектного изделия " , d21.getText().toString());
+        zayavkaData.put("Предварительная причина поломки (выявленный недостаток) ", d22.getText().toString());
+        zayavkaData.put("typezayavka",  "Ремонт");
+        zayavkaData.put("user", currentUserEmail);
+        db.collection("zayavka")
+                .add(zayavkaData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        // Document created successfully
+                        Log.d("zayavka", "DocumentSnapshot written with ID: " + documentReference.getId());
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Failed to create document
+                        Toast.makeText(Osnovnaja.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
+                        Log.e("zayavka", "Error adding document", e);
+                    }
+                });
+    }
+    private void sendTO() {
+        Map<String, Object> zayavkaData = new HashMap<>();
+        zayavkaData.put("Наша организация" ,  t1.getText().toString());
+        zayavkaData.put("Наименование изделия",  t2.getText().toString());
+        zayavkaData.put("Дата приобретения" ,  t3.getText().toString());
+        zayavkaData.put("№ товарной накладной",  t4.getText().toString());
+        zayavkaData.put("Модель техники (оборудования)",  t5.getText().toString());
+        zayavkaData.put("Серийный номер техники (оборудования)", t6.getText().toString());
+        zayavkaData.put("Дата ввода в эксплуатацию", t7.getText().toString());
+        zayavkaData.put("Кол-во отработанных часов",  t8.getText().toString());
+        zayavkaData.put("Модель двигателя ",  t9.getText().toString());
+        zayavkaData.put("Владелец компании", t10.getText().toString());
+        zayavkaData.put("Серийный номер двигателя ", t11.getText().toString());
+        zayavkaData.put("Дата реализации техники (оборудования)", t12.getText().toString());
+        zayavkaData.put("Владелец техники (об-ния) ",t13.getText().toString());
+        zayavkaData.put("Адрес владельца ",t14.getText().toString());
+        zayavkaData.put("Область владельца", t15.getText().toString());
+        zayavkaData.put("Район владельца ", t16.getText().toString());
+        zayavkaData.put("Адрес места эксплуатации / места проведения ремонта ", t17.getText().toString());
+        zayavkaData.put("Область места эксплуатации ", t18.getText().toString());
+        zayavkaData.put("Район места эксплуатации ", t19.getText().toString());
+        zayavkaData.put("Расстояние от технического центра до места проведения ремонта (туда и обратно), км ", d20.getText().toString());
+        zayavkaData.put("Наименование дефектного изделия " , t21.getText().toString());
+        zayavkaData.put("Предварительная причина поломки (выявленный недостаток) ", t22.getText().toString());;
+        zayavkaData.put("typezayavka",  "Техническое Обслуживание");
+        zayavkaData.put("user", currentUserEmail);
+        db.collection("zayavka")
+                .add(zayavkaData)
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        // Document created successfully
+                        Log.d("zayavka", "DocumentSnapshot written with ID: " + documentReference.getId());
+
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Failed to create document
+                        Toast.makeText(Osnovnaja.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
+                        Log.e("zayavka", "Error adding document", e);
+                    }
+                });
+    }
+    private void getLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        try {
+            Log.d(TAG, "getLocation: Requesting location updates");
+            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                // В методе onLocationChanged
+                @Override
+                public void onLocationChanged(Location location) {
+                    Log.d(TAG, "onLocationChanged: Location changed");
+                    currentLatitude = location.getLatitude();
+                    currentLongitude = location.getLongitude();
+
+                    // Получение полного адреса текущего местоположения
+                    String currentAddressUrl = "https://nominatim.openstreetmap.org/reverse?lat=" +
+                            currentLatitude + "&lon=" + currentLongitude + "&format=json";
+
+                    JsonObjectRequest currentAddressRequest = new JsonObjectRequest(Request.Method.GET, currentAddressUrl, null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        JSONObject addressDetails = response.getJSONObject("address");
+                                        // Получение полного адреса
+                                        String userAddress = addressDetails.optString("city") + ", " +
+                                                addressDetails.optString("road") + " " +
+                                                addressDetails.optString("house_number");
+                                        // Построение URL для отображения маршрута
+                                        double destinationLatitude = 51.74184;
+                                        double destinationLongitude = 55.09565;
+                                        String apiKey = "1b5c7ff9-e26a-4bc3-8861-1f67387981fd";
+                                        String url = "https://graphhopper.com/api/1/route?point=" +
+                                                currentLatitude + "%2C" + currentLongitude + "&point=" +
+                                                destinationLatitude + "%2C" + destinationLongitude +
+                                                "&vehicle=car&locale=ru&key=" + apiKey;
+                                        String url2 = "https://www.openstreetmap.org/directions?engine=graphhopper_car&route=" +
+                                                currentLatitude + "%2C" + currentLongitude + "%3B" +
+                                                destinationLatitude + "%2C" + destinationLongitude;
+                                        webView.loadUrl(url2);
+                                        // Отправка запроса к GraphHopper API и получение ответа
+                                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                                                new Response.Listener<JSONObject>() {
+                                                    @Override
+                                                    public void onResponse(JSONObject response) {
+                                                        // Обработка ответа от GraphHopper API
+                                                        processRouteResponse(response, userAddress);
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        // Обработка ошибки
+                                                    }
+                                                });
+
+                                        // Добавление запроса в очередь запросов
+                                        RequestQueue requestQueue = Volley.newRequestQueue(Osnovnaja.this);
+                                        requestQueue.add(jsonObjectRequest);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // Обработка ошибки
+                                }
+                            });
+                    RequestQueue requestQueue = Volley.newRequestQueue(Osnovnaja.this);
+                    requestQueue.add(currentAddressRequest);
+                }
+
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                @Override
+                public void onProviderEnabled(String provider) {}
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    Toast.makeText(Osnovnaja.this, "Please enable GPS", Toast.LENGTH_SHORT).show();
+                }
+            }, null);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Log.e(TAG, "getLocation: SecurityException: " + e.getMessage());
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void processRouteResponse(JSONObject response, String destinationAddress) {
+        try {
+            // Получение массива сегментов маршрута
+            JSONArray paths = response.getJSONArray("paths");
+            JSONObject path = paths.getJSONObject(0); // Берем первый сегмент
+            Log.d(TAG, "processRouteResponse: Processing route response");
+            // Получение геометрии маршрута (список координат)
+            String points = path.getString("points");
+            List<LatLng> coordinates = parseCoordinates(points);
+
+            // Получение длины маршрута в метрах
+            double distanceMeters = path.getDouble("distance");
+
+            // Конвертация метров в километры
+            double distanceKilometers = distanceMeters / 1000.0;
+
+            // Отображение расстояния и адреса места назначения в TextView
+            DecimalFormat df = new DecimalFormat("#.##");
+
+            String fullAddress = "Расстояние маршрута: " + df.format(distanceKilometers) + " км\n" +
+                    "Адрес места назначения: " + destinationAddress;
+            distanceTextView.setText(fullAddress);
+            SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
+            String currentUserEmail = sp.getString("CurrentUserEmail", "");
+            // Проверка наличия документа с данными пользователя
+            db.collection("map")
+                    .whereEqualTo("user", currentUserEmail)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String documentId = documentSnapshot.getId();
+                            // Обновление существующего документа
+                            Map<String, Object> mapData = new HashMap<>();
+                            mapData.put("mappoint", destinationAddress);
+                            mapData.put("km", distanceKilometers);
+                            mapData.put("latitude", currentLatitude);
+                            mapData.put("longitude", currentLongitude);
+                            mapData.put("user", currentUserEmail);
+                            db.collection("map").document(documentId).update(mapData)
+                                    .addOnSuccessListener(aVoid -> Toast.makeText(Osnovnaja.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show())
+                                    .addOnFailureListener(e -> Toast.makeText(Osnovnaja.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show());
+                            // Если найден документ, соответствующий текущему пользователю, выходим из цикла
+                            break;
+                        }
+                    });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "processRouteResponse: JSONException: " + e.getMessage());
+        }
+        // Планирование обновления геолокации через 10 секунд
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getLocation();
+            }
+        }, UPDATE_INTERVAL);
+    }
+
+    private void searchLocation(String searchText) {
+        // Формируем URL для поиска местоположений
+
+        String searchUrl;
+        try {
+            searchUrl = "https://nominatim.openstreetmap.org/search?q=" + URLEncoder.encode(searchText, "UTF-8") + "&format=json";
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // Ваш обработчик исключения
+            searchUrl = "https://nominatim.openstreetmap.org/search?q=" + searchText + "&format=json";
+        }
+        // Отправляем запрос
+        JsonObjectRequest searchRequest = new JsonObjectRequest(Request.Method.GET, searchUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Обработка ответа с результатами поиска
+                        processSearchResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Обработка ошибки
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(searchRequest);
+    }
+    private void processSearchResponse(JSONObject response) {
+        try {
+            // Получаем массив результатов поиска
+            JSONArray results = response.getJSONArray("results");
+
+            // Создаем список для отображения результатов пользователю
+            List<String> searchResults = new ArrayList<>();
+
+            // Проходим по всем результатам и добавляем их в список
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject result = results.getJSONObject(i);
+                String displayName = result.optString("display_name");
+                searchResults.add(displayName);
+            }
+
+            // Отображаем результаты пользователю, например, в выпадающем списке или списке подсказок
+            // Например, можно использовать AutoCompleteTextView для автодополнения
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, searchResults);
+            autoCompleteTextView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+    private List<LatLng> parseCoordinates(String points) {
+        List<LatLng> coordinates = new ArrayList<>();
+        try {
+            // Разделим строку на отдельные координаты
+            String[] pointsArray = points.split(";");
+            for (String point : pointsArray) {
+                // Разделим координаты широты и долготы
+                String[] latLng = point.split(",");
+                // Проверим, что полученные значения представляют числа
+                if (latLng.length == 2) {
+                    double latitude = Double.parseDouble(latLng[0]);
+                    double longitude = Double.parseDouble(latLng[1]);
+                    // Создаем объект LatLng и добавляем его в список
+                    coordinates.add(new LatLng(latitude, longitude));
+                } else {
+                    Log.e(TAG, "parseCoordinates: Invalid coordinates format: " + point);
+                }
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Log.e(TAG, "parseCoordinates: NumberFormatException: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "parseCoordinates: Exception: " + e.getMessage());
+        }
+        return coordinates;
     }
 
     // Метод открытия карты
@@ -243,12 +896,14 @@ public class Osnovnaja extends AppCompatActivity {
     // Метод добавления информации в макет
     private void addDetailsToLayout(DocumentSnapshot document) {
         // Создание нового блока для каждого документа
+        // Загрузка шрифта из файла assets
+
         CardView cardView = new CardView(this);
         LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT
         );
-        cardParams.setMargins(0, 0, 0, 50);
+        cardParams.setMargins(50, 25, 50, 25);
         cardView.setLayoutParams(cardParams);
 
 
@@ -265,21 +920,26 @@ public class Osnovnaja extends AppCompatActivity {
         TextView dateTextView = new TextView(this);
         dateTextView.setLayoutParams(params);
         dateTextView.setText(formatDate(document.getTimestamp("timestamp").toDate()));
+        dateTextView.setPadding(50, 25, 50, 0);
+        dateTextView.setTypeface(Typeface.SANS_SERIF);
         layout.addView(dateTextView);
 
         TextView titleTextView = new TextView(this);
         titleTextView.setLayoutParams(params);
         titleTextView.setText(document.getString("bigtext"));
         titleTextView.setTextColor(getResources().getColor(R.color.black));
-        titleTextView.setTextSize(18);
+        titleTextView.setTypeface(Typeface.DEFAULT_BOLD);
+        titleTextView.setPadding(50, 15, 50, 25);
+        titleTextView.setTextSize(16);
         layout.addView(titleTextView);
 
         TextView textTextView = new TextView(this);
         textTextView.setLayoutParams(params);
         textTextView.setText(document.getString("text"));
         textTextView.setTextColor(getResources().getColor(R.color.black));
+        textTextView.setPadding(50, 25, 50, 0);
         layout.addView(textTextView);
-
+        textTextView.setTypeface(Typeface.SANS_SERIF);
         cardView.addView(layout);
         detailsContainer.addView(cardView);
     }

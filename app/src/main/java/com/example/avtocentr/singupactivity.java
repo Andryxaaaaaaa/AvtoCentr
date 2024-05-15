@@ -132,7 +132,7 @@ public class singupactivity extends AppCompatActivity {
                                                                     @Override
                                                                     public void onSuccess(DocumentReference documentReference) {
                                                                         // Document created successfully
-                                                                        Log.d("UserInfo", "DocumentSnapshot written with ID: " + documentReference.getId());
+                                                                        Log.d("userInfo", "DocumentSnapshot written with ID: " + documentReference.getId());
                                                                         startActivity(new Intent(singupactivity.this, SignFIO.class));
                                                                     }
                                                                 })
@@ -141,9 +141,10 @@ public class singupactivity extends AppCompatActivity {
                                                                     public void onFailure(@NonNull Exception e) {
                                                                         // Failed to create document
                                                                         Toast.makeText(singupactivity.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
-                                                                        Log.e("UserInfo", "Error adding document", e);
+                                                                        Log.e("userInfo", "Error adding document", e);
                                                                     }
                                                                 });
+
                                                     }
                                                 })
                                                 .addOnFailureListener(new OnFailureListener() {

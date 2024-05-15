@@ -2,213 +2,328 @@ package com.example.avtocentr;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.net.Uri;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.FragmentActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class map extends FragmentActivity  {
-    // Код запроса для обратного вызова
-    private static final int REQUEST_PICK_LOCATION = 1;
-    // Код запроса для разрешения доступа к местоположению
-    static final int REQUEST_LOCATION_PERMISSION = 2;
-
-    // Координаты стартовой точки
-    private double startLatitude = 51.742124445022874;
-    private double startLongitude = 55.09555714401241;
-
-    // Ссылка на TextView
+public class map extends AppCompatActivity {
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private static final int UPDATE_INTERVAL = 600000; // 10 seconds
+    private static final String TAG = "MapActivity";
+    private WebView webView;
     private TextView distanceTextView;
-
+    private AutoCompleteTextView autoCompleteTextView;
+    private FirebaseFirestore db;
+    private Handler handler = new Handler();
+    double currentLatitude;
+    double currentLongitude;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
-
-        // Initialize Firestore
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
-
-        // Get references to EditText and Button
-        EditText editTextLocation = findViewById(R.id.editTextLocation);
-        EditText editTextDistance = findViewById(R.id.editTextDistance);
-        Button saveButton = findViewById(R.id.button6);
-
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
+        Log.d(TAG, "onCreate: Activity started");
+        webView = findViewById(R.id.webView);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        db = FirebaseFirestore.getInstance();
+        webView = findViewById(R.id.webView);
+        distanceTextView = findViewById(R.id.distanceTextView);
+        autoCompleteTextView = findViewById(R.id.autoCompleteTextView);
+        autoCompleteTextView.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                String currentUserEmail = sp.getString("CurrentUserEmail", ""); // Получение email пользователя из SharedPreferences
-                if (editTextLocation.getText().toString().isEmpty() || editTextDistance.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Проверьте поля!", Toast.LENGTH_LONG).show();
-                } else {
-                    // Check if the user exists
-                    db.collection("map")
-                            .whereEqualTo("user", currentUserEmail)
-                            .get()
-                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                                @Override
-                                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-                                        String documentId = documentSnapshot.getId();
-                                        // Update the existing document
-                                        Map<String, Object> mapData = new HashMap<>();
-                                        mapData.put("mappoint", editTextLocation.getText().toString());
-                                        mapData.put("km", editTextDistance.getText().toString());
-                                        // Use the current user's email to update the document
-                                        mapData.put("user", currentUserEmail);
-                                        db.collection("map").document(documentId).update(mapData).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-                                                Toast.makeText(map.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show();
-                                                startActivity(new Intent(map.this, Glavnaya.class));
-                                            }
-                                        }).addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Toast.makeText(map.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();
-                                            }
-                                        });
-                                        // Если найден документ, соответствующий текущему пользователю, выходим из цикла
-                                        break;
-                                    }
-                                }
-                            });
-                }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                // Этот метод вызывается перед тем, как текст изменится
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Этот метод вызывается при изменении текста
+                // Отправляем запрос на поиск местоположений при изменении текста
+                searchLocation(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Этот метод вызывается после того, как текст изменится
             }
         });
-
-
-
-        // Проверяем наличие разрешения на доступ к местоположению
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // Если разрешение не было предоставлено, запрашиваем его у пользователя
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
+        // Проверяем разрешение на доступ к геолокации
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Запрашиваем разрешение на доступ к геолокации
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         } else {
-            // Если разрешение уже было предоставлено, открываем карту
-            openMap();
+            // Разрешение уже получено, получаем текущее местоположение пользователя
+            getLocation();
         }
     }
 
-    private void openMap() {
-        // Получаем местоположение пользователя, если разрешение на доступ к местоположению было предоставлено
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-            // Получаем доступ к провайдеру местоположения
-            // В реальном приложении следует также проверить наличие провайдера и обработать ситуацию, когда местоположение не доступно
-            Location userLocation = getCurrentLocation();
+    private void getLocation() {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        try {
+            Log.d(TAG, "getLocation: Requesting location updates");
+            locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, new LocationListener() {
+                // В методе onLocationChanged
+                @Override
+                public void onLocationChanged(Location location) {
+                    Log.d(TAG, "onLocationChanged: Location changed");
+                    currentLatitude = location.getLatitude();
+                    currentLongitude = location.getLongitude();
 
-            if (userLocation != null) {
-                // Если местоположение пользователя доступно, получаем его координаты
-                double endLatitude = userLocation.getLatitude();
-                double endLongitude = userLocation.getLongitude();
+                    // Получение полного адреса текущего местоположения
+                    String currentAddressUrl = "https://nominatim.openstreetmap.org/reverse?lat=" +
+                            currentLatitude + "&lon=" + currentLongitude + "&format=json";
 
-                // Расчет расстояния между точками
-                double distance = calculateDistance(startLatitude, startLongitude, endLatitude, endLongitude);
+                    JsonObjectRequest currentAddressRequest = new JsonObjectRequest(Request.Method.GET, currentAddressUrl, null,
+                            new Response.Listener<JSONObject>() {
+                                @Override
+                                public void onResponse(JSONObject response) {
+                                    try {
+                                        JSONObject addressDetails = response.getJSONObject("address");
+                                        // Получение полного адреса
+                                        String userAddress = addressDetails.optString("city") + ", " +
+                                                addressDetails.optString("road") + " " +
+                                                addressDetails.optString("house_number");
+                                        // Построение URL для отображения маршрута
+                                        double destinationLatitude = 51.74184;
+                                        double destinationLongitude = 55.09565;
+                                        String apiKey = "1b5c7ff9-e26a-4bc3-8861-1f67387981fd";
+                                        String url = "https://graphhopper.com/api/1/route?point=" +
+                                                currentLatitude + "%2C" + currentLongitude + "&point=" +
+                                                destinationLatitude + "%2C" + destinationLongitude +
+                                                "&vehicle=car&locale=ru&key=" + apiKey;
+                                        String url2 = "https://www.openstreetmap.org/directions?engine=graphhopper_car&route=" +
+                                                currentLatitude + "%2C" + currentLongitude + "%3B" +
+                                                destinationLatitude + "%2C" + destinationLongitude;
+                                        webView.loadUrl(url2);
+                                        // Отправка запроса к GraphHopper API и получение ответа
+                                        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, null,
+                                                new Response.Listener<JSONObject>() {
+                                                    @Override
+                                                    public void onResponse(JSONObject response) {
+                                                        // Обработка ответа от GraphHopper API
+                                                        processRouteResponse(response, userAddress);
+                                                    }
+                                                },
+                                                new Response.ErrorListener() {
+                                                    @Override
+                                                    public void onErrorResponse(VolleyError error) {
+                                                        // Обработка ошибки
+                                                    }
+                                                });
 
-                // Создание URI для запроса открытия карты с указанием стартовой и конечной точек маршрута
-                Uri mapUri = Uri.parse("https://www.google.com/maps/dir/?api=1&origin=" +
-                        startLatitude + "," + startLongitude + "&destination=" + endLatitude + "," + endLongitude);
-
-                // Создание интента для открытия карты
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, mapUri);
-
-                // Установка флага для обязательного использования приложения Google Maps
-                mapIntent.setPackage("com.google.android.apps.maps");
-
-                // Добавление флага для закрытия всех активностей, связанных с картой, после ее открытия
-                mapIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                // Проверка наличия устройства для обработки интента
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                    // Запуск активности для открытия карты
-                    startActivity(mapIntent);
-                } else {
-                    // Обработка случая, когда не найдено приложение для открытия карты
-                    Toast.makeText(this, "Приложение для карт не найдено", Toast.LENGTH_SHORT).show();
+                                        // Добавление запроса в очередь запросов
+                                        RequestQueue requestQueue = Volley.newRequestQueue(map.this);
+                                        requestQueue.add(jsonObjectRequest);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            },
+                            new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    // Обработка ошибки
+                                }
+                            });
+                    RequestQueue requestQueue = Volley.newRequestQueue(map.this);
+                    requestQueue.add(currentAddressRequest);
                 }
 
-                // Вывод второй точки в logcat
-                Log.d("SecondPoint", "Latitude: " + endLatitude + ", Longitude: " + endLongitude);
-            } else {
-                // Обработка случая, когда местоположение пользователя не доступно
-                Toast.makeText(this, "Местоположение пользователя не доступно", Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+                @Override
+                public void onProviderEnabled(String provider) {}
+
+                @Override
+                public void onProviderDisabled(String provider) {
+                    Toast.makeText(map.this, "Please enable GPS", Toast.LENGTH_SHORT).show();
+                }
+            }, null);
+        } catch (SecurityException e) {
+            e.printStackTrace();
+            Log.e(TAG, "getLocation: SecurityException: " + e.getMessage());
+            Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Получение текущего местоположения пользователя
-    private Location getCurrentLocation() {
-        // Здесь следует использовать ваш механизм получения текущего местоположения пользователя
-        // Например, с использованием Fused Location Provider API или LocationManager
-        // В данном примере возвращается просто случайное местоположение
-        Location location = new Location("dummyProvider");
-        location.setLatitude(startLatitude);
-        location.setLongitude(startLongitude);
-        return location;
+    private void processRouteResponse(JSONObject response, String destinationAddress) {
+        try {
+            // Получение массива сегментов маршрута
+            JSONArray paths = response.getJSONArray("paths");
+            JSONObject path = paths.getJSONObject(0); // Берем первый сегмент
+            Log.d(TAG, "processRouteResponse: Processing route response");
+            // Получение геометрии маршрута (список координат)
+            String points = path.getString("points");
+            List<LatLng> coordinates = parseCoordinates(points);
+
+            // Получение длины маршрута в метрах
+            double distanceMeters = path.getDouble("distance");
+
+            // Конвертация метров в километры
+            double distanceKilometers = distanceMeters / 1000.0;
+
+            // Отображение расстояния и адреса места назначения в TextView
+            DecimalFormat df = new DecimalFormat("#.##");
+
+            String fullAddress = "Расстояние маршрута: " + df.format(distanceKilometers) + " км\n" +
+                    "Адрес места назначения: " + destinationAddress;
+            distanceTextView.setText(fullAddress);
+            SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
+            String currentUserEmail = sp.getString("CurrentUserEmail", "");
+            // Проверка наличия документа с данными пользователя
+            db.collection("map")
+                    .whereEqualTo("user", currentUserEmail)
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            String documentId = documentSnapshot.getId();
+                            // Обновление существующего документа
+                            Map<String, Object> mapData = new HashMap<>();
+                            mapData.put("mappoint", destinationAddress);
+                            mapData.put("km", distanceKilometers);
+                            mapData.put("latitude", currentLatitude);
+                            mapData.put("longitude", currentLongitude);
+                            mapData.put("user", currentUserEmail);
+                            db.collection("map").document(documentId).update(mapData)
+                                    .addOnSuccessListener(aVoid -> Toast.makeText(map.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show())
+                                    .addOnFailureListener(e -> Toast.makeText(map.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show());
+                            // Если найден документ, соответствующий текущему пользователю, выходим из цикла
+                            break;
+                        }
+                    });
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Log.e(TAG, "processRouteResponse: JSONException: " + e.getMessage());
+        }
+        // Планирование обновления геолокации через 10 секунд
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                getLocation();
+            }
+        }, UPDATE_INTERVAL);
     }
 
-    // Обработка результата запроса разрешения на доступ к местоположению
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == REQUEST_LOCATION_PERMISSION) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // Если разрешение было предоставлено, открываем карту
-                openMap();
-            } else {
-                // Если разрешение не было предоставлено, вы можете обработать это событие здесь
-                // Например, показать диалог с объяснением, почему доступ к местоположению важен для вашего приложения
-                // или предложить пользователю предоставить разрешение повторно в настройках приложения
-                Toast.makeText(this, "Доступ к местоположению не предоставлен", Toast.LENGTH_SHORT).show();
+    private void searchLocation(String searchText) {
+        // Формируем URL для поиска местоположений
+
+        String searchUrl;
+        try {
+            searchUrl = "https://nominatim.openstreetmap.org/search?q=" + URLEncoder.encode(searchText, "UTF-8") + "&format=json";
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            // Ваш обработчик исключения
+            searchUrl = "https://nominatim.openstreetmap.org/search?q=" + searchText + "&format=json";
+        }
+        // Отправляем запрос
+        JsonObjectRequest searchRequest = new JsonObjectRequest(Request.Method.GET, searchUrl, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        // Обработка ответа с результатами поиска
+                        processSearchResponse(response);
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Обработка ошибки
+                    }
+                });
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        requestQueue.add(searchRequest);
+    }
+    private void processSearchResponse(JSONObject response) {
+        try {
+            // Получаем массив результатов поиска
+            JSONArray results = response.getJSONArray("results");
+
+            // Создаем список для отображения результатов пользователю
+            List<String> searchResults = new ArrayList<>();
+
+            // Проходим по всем результатам и добавляем их в список
+            for (int i = 0; i < results.length(); i++) {
+                JSONObject result = results.getJSONObject(i);
+                String displayName = result.optString("display_name");
+                searchResults.add(displayName);
             }
+
+            // Отображаем результаты пользователю, например, в выпадающем списке или списке подсказок
+            // Например, можно использовать AutoCompleteTextView для автодополнения
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, searchResults);
+            autoCompleteTextView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
-
-    // Метод для расчета расстояния между двумя точками по широте и долготе
-    private double calculateDistance(double startLatitude, double startLongitude, double endLatitude, double endLongitude) {
-        // Радиус Земли в километрах
-        final double RADIUS_EARTH = 6371;
-
-        // Преобразование градусов в радианы
-        double startLatRadians = Math.toRadians(startLatitude);
-        double endLatRadians = Math.toRadians(endLatitude);
-        double deltaLatRadians = Math.toRadians(endLatitude - startLatitude);
-        double deltaLonRadians = Math.toRadians(endLongitude - startLongitude);
-
-        // Расчет гаверсинуса расстояния
-        double a = Math.sin(deltaLatRadians / 2) * Math.sin(deltaLatRadians / 2) +
-                Math.cos(startLatRadians) * Math.cos(endLatRadians) *
-                        Math.sin(deltaLonRadians / 2) * Math.sin(deltaLonRadians / 2);
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-
-        // Расчет расстояния
-        double distance = RADIUS_EARTH * c;
-
-        return distance;
+    private List<LatLng> parseCoordinates(String points) {
+        List<LatLng> coordinates = new ArrayList<>();
+        try {
+            // Разделим строку на отдельные координаты
+            String[] pointsArray = points.split(";");
+            for (String point : pointsArray) {
+                // Разделим координаты широты и долготы
+                String[] latLng = point.split(",");
+                // Проверим, что полученные значения представляют числа
+                if (latLng.length == 2) {
+                    double latitude = Double.parseDouble(latLng[0]);
+                    double longitude = Double.parseDouble(latLng[1]);
+                    // Создаем объект LatLng и добавляем его в список
+                    coordinates.add(new LatLng(latitude, longitude));
+                } else {
+                    Log.e(TAG, "parseCoordinates: Invalid coordinates format: " + point);
+                }
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            Log.e(TAG, "parseCoordinates: NumberFormatException: " + e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.e(TAG, "parseCoordinates: Exception: " + e.getMessage());
+        }
+        return coordinates;
     }
 }

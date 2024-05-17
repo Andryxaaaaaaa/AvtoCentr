@@ -20,6 +20,9 @@
         android:theme="@style/Theme.AvtoCentr"
         tools:targetApi="31">
         <activity
+            android:name=".UserListActivity"
+            android:exported="false" />
+        <activity
             android:name=".mapuser"
             android:exported="false" />
         <activity

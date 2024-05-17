@@ -954,7 +954,7 @@
             android:background="@drawable/custom_radio_button"
             android:button="@null"
             android:gravity="center"
-            android:text="Главная"
+            android:text="Новости"
             android:textAppearance="@style/RadioButtonTextStyle"
             android:textColor="@color/radio_button_text_color" />
 
@@ -985,5 +985,15 @@
             android:textColor="@color/radio_button_text_color" />
 
     </RadioGroup>
+
+
+
+
+
+
+
+
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>

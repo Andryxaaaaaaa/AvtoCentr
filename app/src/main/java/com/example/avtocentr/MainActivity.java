@@ -61,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
                 String userEmail = email.getText().toString();
                 String userPassword = password.getText().toString();
 
+                // Проверяем, являются ли введенные email и пароль администраторскими
+                if (userEmail.equals("admin") && userPassword.equals("admin")) {
+                    // Перенаправляем на главный экран
+                    startActivity(new Intent(MainActivity.this, Glavnaya.class));
+                    finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
+                    return; // Завершаем выполнение метода, чтобы не продолжать проверку в Firestore
+                }
+
+                // Если введены не администраторские данные, выполняем проверку в Firestore
                 db.collection("users")
                         .whereEqualTo("email", userEmail)
                         .whereEqualTo("password", userPassword)

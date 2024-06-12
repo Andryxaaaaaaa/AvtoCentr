@@ -26,7 +26,7 @@
             android:layout_height="75px"
             android:layout_marginStart="20dp"
             android:layout_marginTop="20dp"
-            android:background="@drawable/profilicon"
+            android:background="@drawable/user"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_marginTop="20dp"
-            android:paddingTop="4dp"
+            android:paddingTop="2dp"
             android:paddingStart="5dp"
             android:clickable="true"
             style="@style/TextStyle"
@@ -73,7 +73,7 @@
             android:id="@+id/buttonHome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/home"
+            android:src="@drawable/novost"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
             app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:scaleType="fitCenter"
             android:adjustViewBounds="true"
-            android:src="@drawable/zajavka"
+            android:src="@drawable/servis"
             android:background="@color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -243,7 +243,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:orientation="vertical"
-        android:visibility="gone"
+
         android:padding="16dp"
         app:layout_constraintBottom_toTopOf="@+id/linearButton"
         app:layout_constraintEnd_toEndOf="parent"
@@ -273,8 +273,6 @@
                         android:background="@drawable/custom_radio_button"
                         android:textSize="16dp"
                         android:layout_marginLeft="8dp"
-
-
 
                         android:button="@null"
                         android:gravity="center"
@@ -320,20 +318,7 @@
 
                         android:textSize="16dp"
                         android:padding="10dp"
-                        android:hint="Наша организация" />
-
-                    <EditText
-                        android:id="@+id/editText112"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Наименование изделия" />
+                        android:hint="Ваша организация *" />
 
                     <EditText
                         android:id="@+id/editText113"
@@ -347,6 +332,7 @@
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
                         android:hint="Дата приобретения" />
+
 
                     <EditText
                         android:id="@+id/editText114"
@@ -372,7 +358,7 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Модель техники (оборудования)" />
+                        android:hint="Модель техники" />
 
                     <EditText
                         android:id="@+id/editText116"
@@ -385,7 +371,7 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Серийный номер техники (оборудования)" />
+                        android:hint="Серийный номер техники (VIN) *" />
 
                     <EditText
                         android:id="@+id/editText117"
@@ -411,7 +397,7 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Кол-во отработанных часов" />
+                        android:hint="Кол-во отработанных часов *" />
 
                     <EditText
                         android:id="@+id/editText119"
@@ -437,72 +423,7 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Серийный номер двигателя" />
-
-                    <EditText
-                        android:id="@+id/editText121"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Дата реализации техники (оборудования)" />
-
-                    <EditText
-                        android:id="@+id/editText122"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Владелец техники (об-ния)" />
-
-                    <EditText
-                        android:id="@+id/editText123"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Адрес владельца" />
-
-                    <EditText
-                        android:id="@+id/editText124"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Область владельца" />
-
-                    <EditText
-                        android:id="@+id/editText125"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Район владельца" />
+                        android:hint="Серийный номер двигателя *" />
 
                     <EditText
                         android:id="@+id/editText126"
@@ -515,59 +436,7 @@
 
                         android:textSize="16dp"
                         android:padding="10dp"
-                        android:hint="Адрес места эксплуатации / места проведения ремонта" />
-
-                    <EditText
-                        android:id="@+id/editText127"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:hint="Область места эксплуатации" />
-
-                    <EditText
-                        android:id="@+id/editText128"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Район места эксплуатации" />
-
-                    <EditText
-                        android:id="@+id/editText129"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Расстояние от технического центра до места проведения ремонта (туда и обратно), км" />
-
-                    <EditText
-                        android:id="@+id/editText130"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Наименование дефектного изделия" />
+                        android:hint="Адрес места эксплуатации / места проведения ремонта *" />
 
                     <EditText
                         android:id="@+id/editText131"
@@ -580,20 +449,9 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Предварительная причина поломки (выявленный недостаток)" />
+                        android:hint="Описание неисправностей (При наличии)" />
 
-                    <EditText
-                        android:id="@+id/editText132"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
 
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Просим произвести гарантийный ремонт (замену)" />
                     <!-- Кнопка "Отправить" -->
                     <Button
                         android:id="@+id/button4"
@@ -619,7 +477,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/radioGroup"
                     android:orientation="vertical"
-                    android:visibility="gone"
+
 
                     android:padding="16dp"
 
@@ -630,7 +488,7 @@
                     <!-- Пример: -->
 
                     <EditText
-                        android:id="@+id/editText222"
+                        android:id="@+id/editText211"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/rounded_edittext_bg"
@@ -640,23 +498,10 @@
 
                         android:textSize="16dp"
                         android:padding="10dp"
-                        android:hint="Наша организация" />
+                        android:hint="Ваша организация *" />
 
                     <EditText
-                        android:id="@+id/editText223"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Наименование изделия" />
-
-                    <EditText
-                        android:id="@+id/editText224"
+                        android:id="@+id/editText213"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -668,8 +513,9 @@
                         android:background="@drawable/rounded_edittext_bg"
                         android:hint="Дата приобретения" />
 
+
                     <EditText
-                        android:id="@+id/editText225"
+                        android:id="@+id/editText214"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -682,7 +528,7 @@
                         android:hint="№ товарной накладной" />
 
                     <EditText
-                        android:id="@+id/editText226"
+                        android:id="@+id/editText215"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -692,10 +538,10 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Модель техники (оборудования)" />
+                        android:hint="Модель техники" />
 
                     <EditText
-                        android:id="@+id/editText227"
+                        android:id="@+id/editText216"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -705,10 +551,10 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Серийный номер техники (оборудования)" />
+                        android:hint="Серийный номер техники (VIN) *" />
 
                     <EditText
-                        android:id="@+id/editText228"
+                        android:id="@+id/editText217"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -721,7 +567,7 @@
                         android:hint="Дата ввода в эксплуатацию" />
 
                     <EditText
-                        android:id="@+id/editText229"
+                        android:id="@+id/editText218"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -731,10 +577,10 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Кол-во отработанных часов" />
+                        android:hint="Кол-во отработанных часов *" />
 
                     <EditText
-                        android:id="@+id/editText230"
+                        android:id="@+id/editText219"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
@@ -747,6 +593,32 @@
                         android:hint="Модель двигателя" />
 
                     <EditText
+                        android:id="@+id/editText220"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="8dp"
+
+                        android:textSize="16dp"
+                        android:padding="10dp"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:hint="Серийный номер двигателя *" />
+
+                    <EditText
+                        android:id="@+id/editText226"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/rounded_edittext_bg"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginRight="8dp"
+
+                        android:textSize="16dp"
+                        android:padding="10dp"
+                        android:hint="Адрес места эксплуатации / места проведения ремонта *" />
+
+                    <EditText
                         android:id="@+id/editText231"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -757,163 +629,7 @@
                         android:textSize="16dp"
                         android:padding="10dp"
                         android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Серийный номер двигателя" />
-
-                    <EditText
-                        android:id="@+id/editText232"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Дата реализации техники (оборудования)" />
-
-                    <EditText
-                        android:id="@+id/editText233"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Владелец техники (об-ния)" />
-
-                    <EditText
-                        android:id="@+id/editText234"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Адрес владельца" />
-
-                    <EditText
-                        android:id="@+id/editText235"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Область владельца" />
-
-                    <EditText
-                        android:id="@+id/editText236"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Район владельца" />
-
-                    <EditText
-                        android:id="@+id/editText237"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:hint="Адрес места эксплуатации / места проведения ремонта" />
-
-                    <EditText
-                        android:id="@+id/editText238"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:hint="Область места эксплуатации" />
-
-                    <EditText
-                        android:id="@+id/editText239"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Район места эксплуатации" />
-
-                    <EditText
-                        android:id="@+id/editText240"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Расстояние от технического центра до места проведения ремонта (туда и обратно), км" />
-
-                    <EditText
-                        android:id="@+id/editText241"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Наименование дефектного изделия" />
-
-                    <EditText
-                        android:id="@+id/editText242"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Предварительная причина поломки (выявленный недостаток)" />
-
-                    <EditText
-                        android:id="@+id/editText243"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginRight="8dp"
-
-                        android:textSize="16dp"
-                        android:padding="10dp"
-                        android:background="@drawable/rounded_edittext_bg"
-                        android:hint="Просим произвести гарантийный ремонт (замену)" />
+                        android:hint="Описание неисправностей (При наличии)" />
 
                     <!-- Кнопка "Отправить" -->
                     <Button
@@ -967,7 +683,7 @@
             android:background="@drawable/custom_radio_button"
             android:button="@null"
             android:gravity="center"
-            android:text="Отправить заявку"
+            android:text="ТО и Ремонт"
             android:textAppearance="@style/RadioButtonTextStyle"
             android:textColor="@color/radio_button_text_color" />
 

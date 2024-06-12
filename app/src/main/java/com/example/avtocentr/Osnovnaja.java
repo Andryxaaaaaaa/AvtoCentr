@@ -38,7 +38,7 @@ import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-
+import com.google.maps.android.PolyUtil;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -53,6 +53,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -107,17 +108,6 @@ public class Osnovnaja extends AppCompatActivity {
     private EditText t10;
     private EditText t11;
     private EditText t12;
-    private EditText t13;
-    private EditText t14;
-    private EditText t15;
-    private EditText t16;
-    private EditText t17;
-    private EditText t18;
-    private EditText t19;
-    private EditText t20;
-    private EditText t21;
-    private EditText t22;
-    private EditText d1;
     private EditText d2;
     private EditText d3;
     private EditText d4;
@@ -129,16 +119,7 @@ public class Osnovnaja extends AppCompatActivity {
     private EditText d10;
     private EditText d11;
     private EditText d12;
-    private EditText d13;
-    private EditText d14;
-    private EditText d15;
-    private EditText d16;
-    private EditText d17;
-    private EditText d18;
-    private EditText d19;
-    private EditText d20;
-    private EditText d21;
-    private EditText d22;
+
     String currentUserFIO;
     String currentUserEmail;
     String adres;
@@ -182,8 +163,8 @@ public class Osnovnaja extends AppCompatActivity {
         detailsContainer = findViewById(R.id.detailsContainer);
         RadioButton radioMaintenance = findViewById(R.id.radioMaintenance);
         RadioButton radioRepair = findViewById(R.id.radioRepair);
-        t1 = findViewById(R.id.editText111);
-        t2 = findViewById(R.id.editText112);
+
+        t2 = findViewById(R.id.editText111);
         t3 = findViewById(R.id.editText113);
         t4 = findViewById(R.id.editText114);
         t5 = findViewById(R.id.editText115);
@@ -191,41 +172,22 @@ public class Osnovnaja extends AppCompatActivity {
         t7 = findViewById(R.id.editText117);
         t8 = findViewById(R.id.editText118);
         t9 = findViewById(R.id.editText119);
-        t10 = findViewById(R.id.editText120);
-        t11 = findViewById(R.id.editText121);
-        t12 = findViewById(R.id.editText122);
-        t13 = findViewById(R.id.editText123);
-        t14 = findViewById(R.id.editText124);
-        t15 = findViewById(R.id.editText125);
-        t16 = findViewById(R.id.editText126);
-        t17 = findViewById(R.id.editText127);
-        t18 = findViewById(R.id.editText128);
-        t19 = findViewById(R.id.editText129);
-        t20 = findViewById(R.id.editText130);
-        t21 = findViewById(R.id.editText131);
-        t22 = findViewById(R.id.editText132);
-        d1 = findViewById(R.id.editText222);
-        d2 = findViewById(R.id.editText222);
-        d3 = findViewById(R.id.editText223);
-        d4 = findViewById(R.id.editText224);
-        d5 = findViewById(R.id.editText225);
-        d6 = findViewById(R.id.editText226);
-        d7 = findViewById(R.id.editText227);
-        d8 = findViewById(R.id.editText228);
-        d9 = findViewById(R.id.editText229);
-        d10 = findViewById(R.id.editText230);
-        d11 = findViewById(R.id.editText231);
-        d12 = findViewById(R.id.editText232);
-        d13 = findViewById(R.id.editText233);
-        d14 = findViewById(R.id.editText234);
-        d15 = findViewById(R.id.editText235);
-        d16 = findViewById(R.id.editText236);
-        d17 = findViewById(R.id.editText237);
-        d18 = findViewById(R.id.editText238);
-        d19 = findViewById(R.id.editText239);
-        d20 = findViewById(R.id.editText240);
-        d21 = findViewById(R.id.editText241);
-        d22 = findViewById(R.id.editText242);
+        t10 =findViewById(R.id.editText120);
+
+        t12 =findViewById(R.id.editText131);
+
+        d2 = findViewById(R.id.editText211);
+        d3 = findViewById(R.id.editText213);
+        d4 = findViewById(R.id.editText214);
+        d5 = findViewById(R.id.editText215);
+        d6 = findViewById(R.id.editText216);
+        d7 = findViewById(R.id.editText217);
+        d8 = findViewById(R.id.editText218);
+        d9 = findViewById(R.id.editText219);
+        d10 = findViewById(R.id.editText220);
+        d11 = findViewById(R.id.editText226);
+        d12 = findViewById(R.id.editText231);
+
 
         Button button = findViewById(R.id.button4);
         Button button2 = findViewById(R.id.button5);
@@ -450,39 +412,26 @@ public class Osnovnaja extends AppCompatActivity {
                     String message = "Сообщение\n Заявка на Ремонт " + "\n" +
                             "ФИО: " + currentUserFIO + "\n" +
                             "Адрес: " + adres + "\n" +
-                            "Наша организация " + d1.getText().toString() + "\n" +
-                            "Наименование изделия " + d2.getText().toString() + "\n" +
+                            "Ваша организация " + d2.getText().toString() + "\n" +
                             "Дата приобретения " + d3.getText().toString() + "\n" +
                             "№ товарной накладной " + d4.getText().toString() + "\n" +
-                            "Модель техники (оборудования) " + d5.getText().toString() + "\n" +
-                            "Серийный номер техники (оборудования) " + d6.getText().toString() + "\n" +
+                            "Модель техники  " + d5.getText().toString() + "\n" +
+                            "Серийный номер техники (VIN) " + d6.getText().toString() + "\n" +
                             "Дата ввода в эксплуатацию " + d7.getText().toString() + "\n" +
                             "Кол-во отработанных часов " + d8.getText().toString() + "\n" +
                             "Модель двигателя " + d9.getText().toString() + "\n" +
                             "Серийный номер двигателя " + d10.getText().toString() + "\n" +
-                            "Дата реализации техники (оборудования) " + d11.getText().toString() + "\n" +
-                            "Владелец техники (об-ния) " + d12.getText().toString() + "\n" +
-                            "Адрес владельца " + d13.getText().toString() + "\n" +
-                            "Область владельца " + d14.getText().toString() + "\n" +
-                            "Район владельца " + d15.getText().toString() + "\n" +
-                            "Адрес места эксплуатации / места проведения ремонта " + d16.getText().toString() + "\n" +
-                            "Область места эксплуатации " + d17.getText().toString() + "\n" +
-                            "Район места эксплуатации " + d18.getText().toString() + "\n" +
-                            "Расстояние от технического центра до места проведения ремонта (туда и обратно), км " + d19.getText().toString() + "\n" +
-                            "Наименование дефектного изделия " + d20.getText().toString() + "\n" +
-                            "Предварительная причина поломки (выявленный недостаток) " + d21.getText().toString() + "\n";
-
+                            "Адрес места эксплуатации / места проведения ремонта " + d11.getText().toString() + "\n" +
+                            "Описание неисправностей (При наличии) " + d12.getText().toString() + "\n" ;
+                    d11.setText(adres);
                     new Thread(() -> sendTO()).start();
                     new Thread(() -> sendMail("avtocentr056@mail.ru", message)).start();
-
-
-
                     // Создание и отображение диалогового окна
                     AlertDialog.Builder builder = new AlertDialog.Builder(this);
                     builder.setMessage("Заявка отправлена. Ожидайте!")
                             .setPositiveButton("OK", (dialog, which) -> {
                                 // Очистка текстовых полей
-                                d1.setText("");
+
                                 d2.setText("");
                                 d3.setText("");
                                 d4.setText("");
@@ -494,15 +443,7 @@ public class Osnovnaja extends AppCompatActivity {
                                 d10.setText("");
                                 d11.setText("");
                                 d12.setText("");
-                                d13.setText("");
-                                d14.setText("");
-                                d15.setText("");
-                                d16.setText("");
-                                d17.setText("");
-                                d18.setText("");
-                                d19.setText("");
-                                d20.setText("");
-                                d21.setText("");
+
                                 radioMaintenance.setChecked(false);
                                 radioRepair.setChecked(false);
                                 layoutRepair.setVisibility(View.GONE);
@@ -555,28 +496,17 @@ public class Osnovnaja extends AppCompatActivity {
 
                     String message = "Сообщение\n Заявка на Техническое обслуживание " + "\n" +
                             "ФИО: " + currentUserFIO + "\n" +
-                            "Адрес: " + adres + "\n" +
-                            "Наша организация " + t1.getText().toString() + "\n" +
-                            "Наименование изделия " + t2.getText().toString() + "\n" +
-                            "Дата приобретения " + t3.getText().toString() + "\n" +
-                            "№ товарной накладной " + t4.getText().toString() + "\n" +
-                            "Модель техники (оборудования) " + t5.getText().toString() + "\n" +
-                            "Серийный номер техники (оборудования) " + t6.getText().toString() + "\n" +
-                            "Дата ввода в эксплуатацию " + t7.getText().toString() + "\n" +
-                            "Кол-во отработанных часов " + t8.getText().toString() + "\n" +
-                            "Модель двигателя " + t9.getText().toString() + "\n" +
-                            "Серийный номер двигателя " + t11.getText().toString() + "\n" +
-                            "Дата реализации техники (оборудования) " + t12.getText().toString() + "\n" +
-                            "Владелец техники (об-ния) " + t13.getText().toString() + "\n" +
-                            "Адрес владельца " + t14.getText().toString() + "\n" +
-                            "Область владельца " + t15.getText().toString() + "\n" +
-                            "Район владельца " + t16.getText().toString() + "\n" +
-                            "Адрес места эксплуатации / места проведения ремонта " + t17.getText().toString() + "\n" +
-                            "Область места эксплуатации " + t18.getText().toString() + "\n" +
-                            "Район места эксплуатации " + t19.getText().toString() + "\n" +
-                            "Расстояние от технического центра до места проведения ремонта (туда и обратно), км " + t20.getText().toString() + "\n" +
-                            "Наименование дефектного изделия " + t21.getText().toString() + "\n" +
-                            "Предварительная причина поломки (выявленный недостаток) " + t22.getText().toString() + "\n";
+                            "Ваша организация " + d2.getText().toString() + "\n" +
+                            "Дата приобретения " + d3.getText().toString() + "\n" +
+                            "№ товарной накладной " + d4.getText().toString() + "\n" +
+                            "Модель техники  " + d5.getText().toString() + "\n" +
+                            "Серийный номер техники (VIN) " + d6.getText().toString() + "\n" +
+                            "Дата ввода в эксплуатацию " + d7.getText().toString() + "\n" +
+                            "Кол-во отработанных часов " + d8.getText().toString() + "\n" +
+                            "Модель двигателя " + d9.getText().toString() + "\n" +
+                            "Серийный номер двигателя " + d10.getText().toString() + "\n" +
+                            "Адрес места эксплуатации / места проведения ремонта " + d11.getText().toString() + "\n" +
+                            "Описание неисправностей (При наличии) " + d12.getText().toString() + "\n" ;
                     new Thread(() -> sendRemont()).start();
                     new Thread(() -> sendMail("avtocentr056@mail.ru", message)).start();
 
@@ -587,7 +517,7 @@ public class Osnovnaja extends AppCompatActivity {
                     builder.setMessage("Заявка отправлена. Ожидайте!")
                             .setPositiveButton("OK", (dialog, which) -> {
                                 // Очистка текстовых полей
-                                t1.setText("");
+
                                 t2.setText("");
                                 t3.setText("");
                                 t4.setText("");
@@ -598,16 +528,7 @@ public class Osnovnaja extends AppCompatActivity {
                                 t9.setText("");
                                 t11.setText("");
                                 t12.setText("");
-                                t13.setText("");
-                                t14.setText("");
-                                t15.setText("");
-                                t16.setText("");
-                                t17.setText("");
-                                t18.setText("");
-                                t19.setText("");
-                                t20.setText("");
-                                t21.setText("");
-                                t22.setText("");
+
                                 radioMaintenance.setChecked(false);
                                 radioRepair.setChecked(false);
                                 layoutRepair.setVisibility(View.GONE);
@@ -668,29 +589,18 @@ public class Osnovnaja extends AppCompatActivity {
         SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
         String currentUserEmail = sp.getString("CurrentUserEmail", "");
         Map<String, Object> zayavkaData = new HashMap<>();
-        zayavkaData.put("Наша организация" ,  d1.getText().toString());
-        zayavkaData.put("Наименование изделия",  d2.getText().toString());
-        zayavkaData.put("Дата приобретения" ,  d3.getText().toString());
-        zayavkaData.put("№ товарной накладной",  d4.getText().toString());
-        zayavkaData.put("Модель техники (оборудования)",  d5.getText().toString());
-        zayavkaData.put("Серийный номер техники (оборудования)",  d6.getText().toString());
-        zayavkaData.put("Дата ввода в эксплуатацию",  d7.getText().toString());
-        zayavkaData.put("Кол-во отработанных часов",  d8.getText().toString());
-        zayavkaData.put("Модель двигателя ",  d9.getText().toString());
-        zayavkaData.put("Владелец компании", d10.getText().toString());
-        zayavkaData.put("Серийный номер двигателя ", d11.getText().toString());
-        zayavkaData.put("Дата реализации техники (оборудования)", d12.getText().toString());
-        zayavkaData.put("Владелец техники (об-ния) ", d13.getText().toString());
-        zayavkaData.put("Адрес владельца ", d14.getText().toString());
-        zayavkaData.put("Область владельца", d15.getText().toString());
-        zayavkaData.put("Район владельца ", d16.getText().toString());
-        zayavkaData.put("Адрес места эксплуатации / места проведения ремонта ", d17.getText().toString());
-        zayavkaData.put("Область места эксплуатации ", d18.getText().toString());
-        zayavkaData.put("Район места эксплуатации ", d19.getText().toString());
-        zayavkaData.put("Расстояние от технического центра до места проведения ремонта (туда и обратно), км ", d20.getText().toString());
-        zayavkaData.put("Наименование дефектного изделия " , d21.getText().toString());
-        zayavkaData.put("Предварительная причина поломки (выявленный недостаток) ", d22.getText().toString());
-        zayavkaData.put("typezayavka",  "Ремонт");
+        zayavkaData.put("Ваша организация",                     d2.getText().toString());
+        zayavkaData.put("Дата приобретения" ,                       d3.getText().toString());
+        zayavkaData.put("№ товарной накладной",                     d4.getText().toString());
+        zayavkaData.put("Модель техники",            d5.getText().toString());
+        zayavkaData.put("Серийный номер техники (VIN)",    d6.getText().toString());
+        zayavkaData.put("Дата ввода в эксплуатацию",                d7.getText().toString());
+        zayavkaData.put("Кол-во отработанных часов",                d8.getText().toString());
+        zayavkaData.put("Модель двигателя ",                        d9.getText().toString());
+        zayavkaData.put("Серийный номер двигателя",                        d10.getText().toString());
+        zayavkaData.put("Адрес места эксплуатации / места проведения ремонта",                d11.getText().toString());
+        zayavkaData.put("Описание неисправностей (При наличии)",   d12.getText().toString());
+        zayavkaData.put("typezayavka",  "Техническое обслуживание");
         zayavkaData.put("user", currentUserEmail);
         db.collection("zayavka")
                 .add(zayavkaData)
@@ -712,32 +622,42 @@ public class Osnovnaja extends AppCompatActivity {
                 });
     }
     private void sendTO() {
+        db.collection("map")
+                .whereEqualTo("user", currentUserEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        for (DocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
+                            // Получение данных из документа
+                            String mappoint = documentSnapshot.getString("mappoint");
+                            t11 = findViewById(R.id.editText126);
+                            t11.setText(mappoint);
+
+
+                        }
+                    } else {
+
+                    }
+                })
+                .addOnFailureListener(e -> {
+
+                });
+
         SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
         String currentUserEmail = sp.getString("CurrentUserEmail", "");
         Map<String, Object> zayavkaData = new HashMap<>();
-        zayavkaData.put("Наша организация" ,  t1.getText().toString());
-        zayavkaData.put("Наименование изделия",  t2.getText().toString());
-        zayavkaData.put("Дата приобретения" ,  t3.getText().toString());
-        zayavkaData.put("№ товарной накладной",  t4.getText().toString());
-        zayavkaData.put("Модель техники (оборудования)",  t5.getText().toString());
-        zayavkaData.put("Серийный номер техники (оборудования)", t6.getText().toString());
-        zayavkaData.put("Дата ввода в эксплуатацию", t7.getText().toString());
-        zayavkaData.put("Кол-во отработанных часов",  t8.getText().toString());
-        zayavkaData.put("Модель двигателя ",  t9.getText().toString());
-        zayavkaData.put("Владелец компании", t10.getText().toString());
-        zayavkaData.put("Серийный номер двигателя ", t11.getText().toString());
-        zayavkaData.put("Дата реализации техники (оборудования)", t12.getText().toString());
-        zayavkaData.put("Владелец техники (об-ния) ",t13.getText().toString());
-        zayavkaData.put("Адрес владельца ",t14.getText().toString());
-        zayavkaData.put("Область владельца", t15.getText().toString());
-        zayavkaData.put("Район владельца ", t16.getText().toString());
-        zayavkaData.put("Адрес места эксплуатации / места проведения ремонта ", t17.getText().toString());
-        zayavkaData.put("Область места эксплуатации ", t18.getText().toString());
-        zayavkaData.put("Район места эксплуатации ", t19.getText().toString());
-        zayavkaData.put("Расстояние от технического центра до места проведения ремонта (туда и обратно), км ", d20.getText().toString());
-        zayavkaData.put("Наименование дефектного изделия " , t21.getText().toString());
-        zayavkaData.put("Предварительная причина поломки (выявленный недостаток) ", t22.getText().toString());;
-        zayavkaData.put("typezayavka",  "Техническое Обслуживание");
+        zayavkaData.put("Ваша организация",                     t2.getText().toString());
+        zayavkaData.put("Дата приобретения" ,                       t3.getText().toString());
+        zayavkaData.put("№ товарной накладной",                     t4.getText().toString());
+        zayavkaData.put("Модель техники",            t5.getText().toString());
+        zayavkaData.put("Серийный номер техники (VIN)",    t6.getText().toString());
+        zayavkaData.put("Дата ввода в эксплуатацию",                t7.getText().toString());
+        zayavkaData.put("Кол-во отработанных часов",                t8.getText().toString());
+        zayavkaData.put("Модель двигателя ",                        t9.getText().toString());
+        zayavkaData.put("Серийный номер двигателя",                        t10.getText().toString());
+        zayavkaData.put("Адрес места эксплуатации / места проведения ремонта",               t11.getText().toString());
+        zayavkaData.put("Описание неисправностей (При наличии)",   t12.getText().toString());
+        zayavkaData.put("typezayavka",  "Ремонт");
         zayavkaData.put("user", currentUserEmail);
         db.collection("zayavka")
                 .add(zayavkaData)
@@ -887,7 +807,6 @@ public class Osnovnaja extends AppCompatActivity {
                             mapData.put("longitude", currentLongitude);
                             mapData.put("user", currentUserEmail);
                             db.collection("map").document(documentId).update(mapData)
-                                    .addOnSuccessListener(aVoid -> Toast.makeText(Osnovnaja.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show())
                                     .addOnFailureListener(e -> Toast.makeText(Osnovnaja.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show());
                             // Если найден документ, соответствующий текущему пользователю, выходим из цикла
                             break;
@@ -964,30 +883,18 @@ public class Osnovnaja extends AppCompatActivity {
     private List<LatLng> parseCoordinates(String points) {
         List<LatLng> coordinates = new ArrayList<>();
         try {
-            // Разделим строку на отдельные координаты
-            String[] pointsArray = points.split(";");
-            for (String point : pointsArray) {
-                // Разделим координаты широты и долготы
-                String[] latLng = point.split(",");
-                // Проверим, что полученные значения представляют числа
-                if (latLng.length == 2) {
-                    double latitude = Double.parseDouble(latLng[0]);
-                    double longitude = Double.parseDouble(latLng[1]);
-                    // Создаем объект LatLng и добавляем его в список
-                    coordinates.add(new LatLng(latitude, longitude));
-                } else {
-                    Log.e(TAG, "parseCoordinates: Invalid coordinates format: " + point);
-                }
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-            Log.e(TAG, "parseCoordinates: NumberFormatException: " + e.getMessage());
+            // Декодируем строку координат в набор LatLng
+            List<LatLng> decodedCoordinates = PolyUtil.decode(points);
+
+            // Добавляем все координаты из декодированного списка в итоговый список координат
+            coordinates.addAll(decodedCoordinates);
         } catch (Exception e) {
             e.printStackTrace();
             Log.e(TAG, "parseCoordinates: Exception: " + e.getMessage());
         }
         return coordinates;
     }
+
 
     // Метод открытия карты
 

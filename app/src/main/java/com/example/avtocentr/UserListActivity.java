@@ -170,15 +170,15 @@ public class UserListActivity extends AppCompatActivity {
                             String chas = (chasObj != null) ? chasObj.toString() : "";
                             Log.d("UserListActivity", "chas: " + chas);
 
-                            Object modelObj = documentSnapshot.get("Модель двигателя");
+                            Object modelObj = documentSnapshot.get("Модель двигателя ");
                             String model = (modelObj != null) ? modelObj.toString() : "";
                             Log.d("UserListActivity", "model: " + model);
 
-                            Object nomerdvigObj = documentSnapshot.get("Серийный номер двигателя");
+                            Object nomerdvigObj = documentSnapshot.get("Серийный номер двигателя ");
                             String nomerdvig = (nomerdvigObj != null) ? nomerdvigObj.toString() : "";
                             Log.d("UserListActivity", "nomerdvig: " + nomerdvig);
 
-                            String userData = "\nТип заявки: " + typezayavka + "\nКол-во отработанных часов: " + chas + " " + "\nМодель двигателя: " + model + " " + "\nСерийный номер двигателя: " + nomerdvig ;
+                            String userData = "\nТип заявки: " + typezayavka + "\nКол-во отработанных часов: " + chas + "ч " + "\nМодель двигателя: " + model + " " + "\nСерийный номер двигателя: " + nomerdvig ;
                             additionalUserDataZayavka.add(userData);
                         }
                         // Уведомляем адаптер об изменениях

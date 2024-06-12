@@ -4,8 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,13 +27,28 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class MainActivity extends AppCompatActivity {
-
+    private boolean isPasswordVisible = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
-
+        EditText passwordEditText = findViewById(R.id.editTextPassword);
+        ImageView eyeIcon = findViewById(R.id.eyeIcon);
+        TextView forgotPassword = findViewById(R.id.forgotPassword);
+        eyeIcon.setOnClickListener(v -> {
+            if (isPasswordVisible) {
+                // Скрыть пароль
+                passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                eyeIcon.setImageResource(R.drawable.ic_eye); // замените на вашу иконку закрытого глаза
+            } else {
+                // Показать пароль
+                passwordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                eyeIcon.setImageResource(R.drawable.ic_eye_off); // замените на вашу иконку открытого глаза
+            }
+            isPasswordVisible = !isPasswordVisible;
+            passwordEditText.setSelection(passwordEditText.length()); // чтобы курсор оставался в конце текста
+        });
         SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
         // Проверяем, вошел ли пользователь ранее
         if (sp.contains("CurrentUserEmail")) {
@@ -53,6 +72,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, singupactivity.class));
+            }
+        });
+        // Обработчик клика для "Забыли пароль?"
+
+        forgotPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, PasswordResetActivity.class));
             }
         });
         button.setOnClickListener(new View.OnClickListener() {

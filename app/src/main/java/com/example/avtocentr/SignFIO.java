@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputFilter;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,8 +23,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 public class SignFIO extends AppCompatActivity {
+
+    // Шаблоны для проверки ввода
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[А-Яа-яЁё]+$");
+    private static final Pattern PHONE_PATTERN = Pattern.compile("^7\\d{10}$");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,7 @@ public class SignFIO extends AppCompatActivity {
         EditText editTextImya = findViewById(R.id.editTextImya);
         EditText editTextOtchestvo = findViewById(R.id.editTextOtchestvo);
         EditText editTextNomer = findViewById(R.id.editTextNomer);
+        editTextNomer.setFilters(new InputFilter[]{new InputFilter.LengthFilter(11)});
         Button saveButton = findViewById(R.id.button);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         SharedPreferences sp = getSharedPreferences("Регистрация", Context.MODE_PRIVATE);
@@ -49,11 +56,19 @@ public class SignFIO extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 String currentUserEmail = sp.getString("CurrentUserEmail", ""); // Получение email пользователя из SharedPreferences
-                if (editTextFamiliya.getText().toString().isEmpty() ||
-                        editTextImya.getText().toString().isEmpty() ||
-                        editTextOtchestvo.getText().toString().isEmpty() ||
-                        editTextNomer.getText().toString().isEmpty()) {
+                String familiya = capitalizeFirstLetter(editTextFamiliya.getText().toString());
+                String imya = capitalizeFirstLetter(editTextImya.getText().toString());
+                String otchestvo = capitalizeFirstLetter(editTextOtchestvo.getText().toString());
+                String nomer = editTextNomer.getText().toString();
+
+                if (familiya.isEmpty() || imya.isEmpty() || otchestvo.isEmpty() || nomer.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Проверьте поля!", Toast.LENGTH_LONG).show();
+                } else if (familiya.length() < 2 || imya.length() < 2 || otchestvo.length() < 2) {
+                    Toast.makeText(getApplicationContext(), "Фамилия, Имя и Отчество должны содержать минимум 2 буквы", Toast.LENGTH_LONG).show();
+                } else if (!NAME_PATTERN.matcher(familiya).matches() || !NAME_PATTERN.matcher(imya).matches() || !NAME_PATTERN.matcher(otchestvo).matches()) {
+                    Toast.makeText(getApplicationContext(), "Фамилия, Имя и Отчество должны содержать только кириллицу", Toast.LENGTH_LONG).show();
+                } else if (!PHONE_PATTERN.matcher(nomer).matches()) {
+                    Toast.makeText(getApplicationContext(), "Введите действительный номер телефона, начинающийся с 7", Toast.LENGTH_LONG).show();
                 } else {
                     // Check if the user exists
                     db.collection("userinfo")
@@ -68,10 +83,10 @@ public class SignFIO extends AppCompatActivity {
                                             String documentId = documentSnapshot.getId();
                                             // Update the existing document
                                             Map<String, Object> userData = new HashMap<>();
-                                            userData.put("familia", editTextFamiliya.getText().toString());
-                                            userData.put("imya", editTextImya.getText().toString());
-                                            userData.put("otchestvo", editTextOtchestvo.getText().toString());
-                                            userData.put("number", editTextNomer.getText().toString());
+                                            userData.put("familia", familiya);
+                                            userData.put("imya", imya);
+                                            userData.put("otchestvo", otchestvo);
+                                            userData.put("number", nomer);
                                             // Use the current user's email to update the document
                                             userData.put("email", currentUserEmail);
                                             // Обновление данных пользователя в базе данных
@@ -96,5 +111,13 @@ public class SignFIO extends AppCompatActivity {
                 }
             }
         });
+    }
+
+        // Метод для преобразования первой буквы в верхний регистр
+    private String capitalizeFirstLetter(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
     }
 }

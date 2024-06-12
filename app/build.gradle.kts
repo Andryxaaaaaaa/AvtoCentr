@@ -43,6 +43,9 @@ android {
 }
 dependencies {
     implementation (libs.google.maps.services)
+    implementation ("org.osmdroid:osmdroid-android:6.1.10")
+    implementation ("com.squareup.okhttp3:okhttp:4.9.1")
+    implementation ("com.google.maps.android:android-maps-utils:2.2.0")
     implementation(libs.volley)
     implementation(libs.appcompat)
     implementation(libs.material)

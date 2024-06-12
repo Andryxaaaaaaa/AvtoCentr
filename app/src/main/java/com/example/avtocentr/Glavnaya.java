@@ -51,7 +51,7 @@ public class Glavnaya extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_glavnaya);
+        setContentView(R.layout.activity_admin);
         listView = findViewById(R.id.ListView);
         db = FirebaseFirestore.getInstance();
         EditText editText = findViewById(R.id.editText);
@@ -175,7 +175,7 @@ public class Glavnaya extends AppCompatActivity {
     public void onItemClick(String selectedUserEmail) {
         // Получаем email выбранного пользователя по его позиции в списке
         // Передаем email выбранного пользователя в UserListActivity
-        Intent intent = new Intent(this, UserListActivity.class);
+        Intent intent = new Intent(this, UserList.class);
         intent.putExtra("selectedUserEmail", selectedUserEmail);
         startActivity(intent);
 

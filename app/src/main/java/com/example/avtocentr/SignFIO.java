@@ -35,7 +35,7 @@ public class SignFIO extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_sign_fio); // Установка макета
+        setContentView(R.layout.activity_sign_user); // Установка макета
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -93,7 +93,7 @@ public class SignFIO extends AppCompatActivity {
                                             db.collection("userinfo").document(documentId).update(userData)
                                                     .addOnSuccessListener(aVoid -> {
                                                         Toast.makeText(SignFIO.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show();
-                                                        startActivity(new Intent(SignFIO.this, MainActivity.class));
+                                                        startActivity(new Intent(SignFIO.this, Login.class));
                                                     })
                                                     .addOnFailureListener(e -> {
                                                         Toast.makeText(SignFIO.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();

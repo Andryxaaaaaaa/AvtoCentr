@@ -29,7 +29,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class PasswordResetActivity extends AppCompatActivity {
+public class PasswordReset extends AppCompatActivity {
 
     private EditText editTextEmail;
     private EditText editTextNewPassword;
@@ -65,7 +65,7 @@ public class PasswordResetActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String email = editTextEmail.getText().toString().trim();
                 if (email.isEmpty()) {
-                    Toast.makeText(PasswordResetActivity.this, "Введите email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PasswordReset.this, "Введите email", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 editTextEmail.setVisibility(View.GONE);
@@ -89,7 +89,7 @@ public class PasswordResetActivity extends AppCompatActivity {
                                 } else {
                                     editTextEmail.setVisibility(View.VISIBLE);
                                     resetPasswordButton.setVisibility(View.VISIBLE);
-                                    Toast.makeText(PasswordResetActivity.this, "Пользователь с таким email не найден", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PasswordReset.this, "Пользователь с таким email не найден", Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -107,7 +107,7 @@ public class PasswordResetActivity extends AppCompatActivity {
                 confirmPasswordButton.setVisibility(View.GONE);
                 if (newPassword.isEmpty() || confirmPassword.isEmpty()) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(PasswordResetActivity.this, "Заполните все поля", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PasswordReset.this, "Заполните все поля", Toast.LENGTH_SHORT).show();
                     editTextNewPassword.setVisibility(View.VISIBLE);
                     editTextConfirmPassword.setVisibility(View.VISIBLE);
                     confirmPasswordButton.setVisibility(View.VISIBLE);
@@ -116,7 +116,7 @@ public class PasswordResetActivity extends AppCompatActivity {
 
                 if (!newPassword.equals(confirmPassword)) {
                     progressBar.setVisibility(View.GONE);
-                    Toast.makeText(PasswordResetActivity.this, "Пароли не совпадают", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PasswordReset.this, "Пароли не совпадают", Toast.LENGTH_SHORT).show();
                     editTextNewPassword.setVisibility(View.VISIBLE);
                     editTextConfirmPassword.setVisibility(View.VISIBLE);
                     confirmPasswordButton.setVisibility(View.VISIBLE);
@@ -165,10 +165,10 @@ public class PasswordResetActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Void> task) {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            Toast.makeText(PasswordResetActivity.this, "Пароль успешно обновлен", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PasswordReset.this, "Пароль успешно обновлен", Toast.LENGTH_SHORT).show();
                             finish();
                         } else {
-                            Toast.makeText(PasswordResetActivity.this, "Ошибка при обновлении пароля", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PasswordReset.this, "Ошибка при обновлении пароля", Toast.LENGTH_SHORT).show();
                             editTextNewPassword.setVisibility(View.VISIBLE);
                             editTextConfirmPassword.setVisibility(View.VISIBLE);
                             confirmPasswordButton.setVisibility(View.VISIBLE);

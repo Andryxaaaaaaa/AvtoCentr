@@ -80,7 +80,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class Osnovnaja extends AppCompatActivity {
+public class Admin extends AppCompatActivity {
 
     // Код запроса для обратного вызова
     private static final int REQUEST_PICK_LOCATION = 1;
@@ -200,13 +200,13 @@ public class Osnovnaja extends AppCompatActivity {
 
         // Обработчик клика по тексту текущего пользователя
         textViewCurrentUserEmail.setOnClickListener(v -> {
-            Intent intent = new Intent(Osnovnaja.this, Profile.class);
+            Intent intent = new Intent(Admin.this, Profile.class);
             startActivity(intent);
         });
 
         // Обработчик клика по кнопке перехода на профиль
         imagebutton.setOnClickListener(v -> {
-            Intent intent = new Intent(Osnovnaja.this, Profile.class);
+            Intent intent = new Intent(Admin.this, Profile.class);
             startActivity(intent);
         });
         buttonHome.setColorFilter(Color.parseColor("#0097ED"));
@@ -544,7 +544,7 @@ public class Osnovnaja extends AppCompatActivity {
                 e.printStackTrace();
                 // Выводим сообщение об ошибке на экран с использованием UI-потока
                 new Handler(Looper.getMainLooper()).post(() ->
-                        Toast.makeText(Osnovnaja.this, "Ошибка при чтении почты", Toast.LENGTH_LONG).show());
+                        Toast.makeText(Admin.this, "Ошибка при чтении почты", Toast.LENGTH_LONG).show());
             }
         }).start();
 
@@ -616,7 +616,7 @@ public class Osnovnaja extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Failed to create document
-                        Toast.makeText(Osnovnaja.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Admin.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
                         Log.e("zayavka", "Error adding document", e);
                     }
                 });
@@ -673,7 +673,7 @@ public class Osnovnaja extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Failed to create document
-                        Toast.makeText(Osnovnaja.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
+                        Toast.makeText(Admin.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
                         Log.e("zayavka", "Error adding document", e);
                     }
                 });
@@ -733,7 +733,7 @@ public class Osnovnaja extends AppCompatActivity {
                                                 });
 
                                         // Добавление запроса в очередь запросов
-                                        RequestQueue requestQueue = Volley.newRequestQueue(Osnovnaja.this);
+                                        RequestQueue requestQueue = Volley.newRequestQueue(Admin.this);
                                         requestQueue.add(jsonObjectRequest);
                                     } catch (JSONException e) {
                                         e.printStackTrace();
@@ -746,7 +746,7 @@ public class Osnovnaja extends AppCompatActivity {
                                     // Обработка ошибки
                                 }
                             });
-                    RequestQueue requestQueue = Volley.newRequestQueue(Osnovnaja.this);
+                    RequestQueue requestQueue = Volley.newRequestQueue(Admin.this);
                     requestQueue.add(currentAddressRequest);
                 }
 
@@ -758,7 +758,7 @@ public class Osnovnaja extends AppCompatActivity {
 
                 @Override
                 public void onProviderDisabled(String provider) {
-                    Toast.makeText(Osnovnaja.this, "Please enable GPS", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Admin.this, "Please enable GPS", Toast.LENGTH_SHORT).show();
                 }
             }, null);
         } catch (SecurityException e) {
@@ -807,7 +807,7 @@ public class Osnovnaja extends AppCompatActivity {
                             mapData.put("longitude", currentLongitude);
                             mapData.put("user", currentUserEmail);
                             db.collection("map").document(documentId).update(mapData)
-                                    .addOnFailureListener(e -> Toast.makeText(Osnovnaja.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show());
+                                    .addOnFailureListener(e -> Toast.makeText(Admin.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show());
                             // Если найден документ, соответствующий текущему пользователю, выходим из цикла
                             break;
                         }

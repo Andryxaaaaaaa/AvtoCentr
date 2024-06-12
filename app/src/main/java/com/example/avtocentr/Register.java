@@ -35,19 +35,17 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class singupactivity extends AppCompatActivity {
+public class Register extends AppCompatActivity {
 
     // Шаблон для проверки пароля
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(
             "^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{7,}$"
     );
-
     private String code; // Переменная для хранения сгенерированного кода
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_singupactivity);
+        setContentView(R.layout.activity_register);
 
         SharedPreferences sp = getSharedPreferences("Регистрация", Context.MODE_PRIVATE);
         EditText email = findViewById(R.id.editTextLogin);
@@ -61,7 +59,7 @@ public class singupactivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(singupactivity.this, MainActivity.class));
+                startActivity(new Intent(Register.this, Login.class));
             }
         });
 
@@ -83,7 +81,7 @@ public class singupactivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                     if (!queryDocumentSnapshots.isEmpty()) {
-                                        Toast.makeText(singupactivity.this, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Register.this, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show();
                                     } else {
                                         Map<String, Object> user = new HashMap<>();
                                         user.put("email", emailText);
@@ -105,13 +103,13 @@ public class singupactivity extends AppCompatActivity {
                                                                     @Override
                                                                     public void onSuccess(DocumentReference documentReference) {
                                                                         sp.edit().putString("CurrentUserEmail", emailText).apply();
-                                                                        startActivity(new Intent(singupactivity.this, SignFIO.class));
+                                                                        startActivity(new Intent(Register.this, SignFIO.class));
                                                                     }
                                                                 })
                                                                 .addOnFailureListener(new OnFailureListener() {
                                                                     @Override
                                                                     public void onFailure(Exception e) {
-                                                                        Toast.makeText(singupactivity.this, "Не удалось создать документ в коллекции 'map'", Toast.LENGTH_LONG).show();
+                                                                        Toast.makeText(Register.this, "Не удалось создать документ в коллекции 'map'", Toast.LENGTH_LONG).show();
                                                                     }
                                                                 });
 
@@ -127,13 +125,13 @@ public class singupactivity extends AppCompatActivity {
                                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                     @Override
                                                                     public void onSuccess(DocumentReference documentReference) {
-                                                                        startActivity(new Intent(singupactivity.this, SignFIO.class));
+                                                                        startActivity(new Intent(Register.this, SignFIO.class));
                                                                     }
                                                                 })
                                                                 .addOnFailureListener(new OnFailureListener() {
                                                                     @Override
                                                                     public void onFailure(Exception e) {
-                                                                        Toast.makeText(singupactivity.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
+                                                                        Toast.makeText(Register.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
                                                                     }
                                                                 });
                                                     }
@@ -141,7 +139,7 @@ public class singupactivity extends AppCompatActivity {
                                                 .addOnFailureListener(new OnFailureListener() {
                                                     @Override
                                                     public void onFailure(Exception e) {
-                                                        Toast.makeText(singupactivity.this, "Не удалось создать пользователя", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(Register.this, "Не удалось создать пользователя", Toast.LENGTH_LONG).show();
                                                     }
                                                 });
                                     }
@@ -150,10 +148,10 @@ public class singupactivity extends AppCompatActivity {
                             .addOnFailureListener(new OnFailureListener() {
                                 @Override
                                 public void onFailure(Exception e) {
-                                    Toast.makeText(singupactivity.this, "Ошибка при проверке email", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Register.this, "Ошибка при проверке email", Toast.LENGTH_LONG).show();
                                 }
                             });
-                    startActivity(new Intent(singupactivity.this, SignFIO.class));
+                    startActivity(new Intent(Register.this, SignFIO.class));
                 }
             }
         });
@@ -180,7 +178,7 @@ public class singupactivity extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                         if (!queryDocumentSnapshots.isEmpty()) {
-                                            Toast.makeText(singupactivity.this, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Register.this, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show();
                                         } else {
                                             email.setVisibility(View.GONE);
                                             password.setVisibility(View.GONE);

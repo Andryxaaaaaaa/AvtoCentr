@@ -21,10 +21,10 @@
         android:theme="@style/Theme.AvtoCentr"
         tools:targetApi="31">
         <activity
-            android:name=".PasswordResetActivity"
+            android:name=".PasswordReset"
             android:exported="false" />
         <activity
-            android:name=".UserListActivity"
+            android:name=".UserList"
             android:exported="false" />
         <activity
             android:name=".Home"
@@ -33,13 +33,13 @@
             android:name=".SignFIO"
             android:exported="false" />
         <activity
-            android:name=".Osnovnaja"
+            android:name=".Admin"
             android:exported="false" />
         <activity
             android:name=".Profile"
             android:exported="false" />
         <activity
-            android:name=".PDF"
+            android:name=".MailPush"
             android:exported="false" />
 
         <meta-data
@@ -50,13 +50,13 @@
             android:name=".map"
             android:exported="false" />
         <activity
-            android:name=".singupactivity"
+            android:name=".Register"
             android:exported="false" />
         <activity
             android:name=".Glavnaya"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

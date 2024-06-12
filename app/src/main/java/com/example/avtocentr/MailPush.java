@@ -34,7 +34,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-public class PDF extends AppCompatActivity {
+public class MailPush extends AppCompatActivity {
 
     private static final String TAG = "PDF";
 
@@ -281,7 +281,7 @@ public class PDF extends AppCompatActivity {
                 e.printStackTrace();
                 // Выводим сообщение об ошибке на экран с использованием UI-потока
                 new Handler(Looper.getMainLooper()).post(() ->
-                        Toast.makeText(PDF.this, "Ошибка при чтении почты", Toast.LENGTH_LONG).show());
+                        Toast.makeText(MailPush.this, "Ошибка при чтении почты", Toast.LENGTH_LONG).show());
             }
         }).start();
     }
@@ -361,7 +361,7 @@ public class PDF extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Failed to create document
-                        Toast.makeText(PDF.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MailPush.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
                         Log.e("zayavka", "Error adding document", e);
                     }
                 });
@@ -406,7 +406,7 @@ public class PDF extends AppCompatActivity {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Failed to create document
-                        Toast.makeText(PDF.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
+                        Toast.makeText(MailPush.this, "Failed to create document in 'userinfo' collection", Toast.LENGTH_LONG).show();
                         Log.e("zayavka", "Error adding document", e);
                     }
                 });

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class UserListActivity extends AppCompatActivity {
+public class UserList extends AppCompatActivity {
 
     private List<String> additionalUserData = new ArrayList<>();
     private List<String> additionalUserDataMap = new ArrayList<>();

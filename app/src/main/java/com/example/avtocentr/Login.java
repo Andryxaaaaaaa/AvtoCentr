@@ -26,13 +26,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
-public class MainActivity extends AppCompatActivity {
+public class Login extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_login);
         EditText passwordEditText = findViewById(R.id.editTextPassword);
         ImageView eyeIcon = findViewById(R.id.eyeIcon);
         TextView forgotPassword = findViewById(R.id.forgotPassword);
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         // Проверяем, вошел ли пользователь ранее
         if (sp.contains("CurrentUserEmail")) {
             // Если пользователь уже вошел, перенаправляем его на экран Glavnaya
-            startActivity(new Intent(MainActivity.this, Osnovnaja.class));
+            startActivity(new Intent(Login.this, Admin.class));
             finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
         }
         // Находим кнопку по ее идентификатору
@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, singupactivity.class));
+                startActivity(new Intent(Login.this, Register.class));
             }
         });
         // Обработчик клика для "Забыли пароль?"
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, PasswordResetActivity.class));
+                startActivity(new Intent(Login.this, PasswordReset.class));
             }
         });
         button.setOnClickListener(new View.OnClickListener() {
@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 // Проверяем, являются ли введенные email и пароль администраторскими
                 if (userEmail.equals("admin") && userPassword.equals("admin")) {
                     // Перенаправляем на главный экран
-                    startActivity(new Intent(MainActivity.this, Glavnaya.class));
+                    startActivity(new Intent(Login.this, Glavnaya.class));
                     finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
                     return; // Завершаем выполнение метода, чтобы не продолжать проверку в Firestore
                 }
@@ -110,15 +110,15 @@ public class MainActivity extends AppCompatActivity {
                                         // Сохраняем состояние входа пользователя в SharedPreferences
                                         sp.edit().putString("CurrentUserEmail", userEmail).apply();
                                         // Перенаправляем на главный экран
-                                        startActivity(new Intent(MainActivity.this, Osnovnaja.class));
+                                        startActivity(new Intent(Login.this, Admin.class));
                                         finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
                                     } else {
                                         // Пользователь не найден
-                                        Toast.makeText(MainActivity.this, "Неверный email или пароль", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(Login.this, "Неверный email или пароль", Toast.LENGTH_LONG).show();
                                     }
                                 } else {
                                     // Ошибка при получении данных из Firestore
-                                    Toast.makeText(MainActivity.this, "Ошибка при получении данных", Toast.LENGTH_LONG).show();
+                                    Toast.makeText(Login.this, "Ошибка при получении данных", Toast.LENGTH_LONG).show();
                                 }
                             }
                         });

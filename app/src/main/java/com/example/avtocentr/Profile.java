@@ -52,7 +52,7 @@ public class Profile extends AppCompatActivity {
                 sp.edit().clear().apply();
 
                 // Переходим на активити "Вход"
-                Intent intent = new Intent(Profile.this, MainActivity.class);
+                Intent intent = new Intent(Profile.this, Login.class);
                 startActivity(intent);
 
             }
@@ -60,7 +60,7 @@ public class Profile extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Profile.this, Osnovnaja.class));
+                startActivity(new Intent(Profile.this, Admin.class));
             }
         });
         // Связывание TextView из макета с переменной

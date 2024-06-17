@@ -1,5 +1,4 @@
 package com.example.avtocentr;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,8 +23,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
-
-
 public class Login extends AppCompatActivity {
     private boolean isPasswordVisible = false;
     @Override
@@ -40,20 +37,20 @@ public class Login extends AppCompatActivity {
             if (isPasswordVisible) {
                 // Скрыть пароль
                 passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                eyeIcon.setImageResource(R.drawable.ic_eye); // замените на вашу иконку закрытого глаза
+                eyeIcon.setImageResource(R.drawable.ic_eye);
             } else {
                 // Показать пароль
                 passwordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                eyeIcon.setImageResource(R.drawable.ic_eye_off); // замените на вашу иконку открытого глаза
+                eyeIcon.setImageResource(R.drawable.ic_eye_off);
             }
             isPasswordVisible = !isPasswordVisible;
-            passwordEditText.setSelection(passwordEditText.length()); // чтобы курсор оставался в конце текста
+            passwordEditText.setSelection(passwordEditText.length());
         });
         SharedPreferences sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
         // Проверяем, вошел ли пользователь ранее
         if (sp.contains("CurrentUserEmail")) {
             // Если пользователь уже вошел, перенаправляем его на экран Glavnaya
-            startActivity(new Intent(Login.this, Admin.class));
+            startActivity(new Intent(Login.this, Osnovnaya.class));
             finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
         }
         // Находим кнопку по ее идентификатору
@@ -75,7 +72,6 @@ public class Login extends AppCompatActivity {
             }
         });
         // Обработчик клика для "Забыли пароль?"
-
         forgotPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -87,15 +83,13 @@ public class Login extends AppCompatActivity {
             public void onClick(View v) {
                 String userEmail = email.getText().toString();
                 String userPassword = password.getText().toString();
-
                 // Проверяем, являются ли введенные email и пароль администраторскими
                 if (userEmail.equals("admin") && userPassword.equals("admin")) {
                     // Перенаправляем на главный экран
-                    startActivity(new Intent(Login.this, Glavnaya.class));
+                    startActivity(new Intent(Login.this, Admin.class));
                     finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
                     return; // Завершаем выполнение метода, чтобы не продолжать проверку в Firestore
                 }
-
                 // Если введены не администраторские данные, выполняем проверку в Firestore
                 db.collection("users")
                         .whereEqualTo("email", userEmail)
@@ -110,7 +104,7 @@ public class Login extends AppCompatActivity {
                                         // Сохраняем состояние входа пользователя в SharedPreferences
                                         sp.edit().putString("CurrentUserEmail", userEmail).apply();
                                         // Перенаправляем на главный экран
-                                        startActivity(new Intent(Login.this, Admin.class));
+                                        startActivity(new Intent(Login.this, Osnovnaya.class));
                                         finish(); // Закрываем текущую активити, чтобы пользователь не мог вернуться назад
                                     } else {
                                         // Пользователь не найден

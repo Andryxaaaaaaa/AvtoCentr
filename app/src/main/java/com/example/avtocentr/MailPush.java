@@ -156,11 +156,6 @@ public class MailPush extends AppCompatActivity {
                             String otchestvo = documentSnapshot.getString("otchestvo");
                             String number = documentSnapshot.getString("number");
                             currentUserFIO = familia + " " + imya + " " + otchestvo;
-
-
-
-
-
                         }
                     } else {
 
@@ -185,7 +180,6 @@ public class MailPush extends AppCompatActivity {
                 })
                 .addOnFailureListener(e -> {
                     // Обработка ошибки
-
                 });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -204,47 +198,36 @@ public class MailPush extends AppCompatActivity {
         Button button = findViewById(R.id.button4);
         Button button2 = findViewById(R.id.button5);
         String tag = "";
-
-
-
         // Создаем новый поток для сетевой операции
         new Thread(() -> {
-
             try {
-
                 // Выводим результат на экран с использованием UI-потока
 
                 button.setOnClickListener(v -> {
-                    String message = "Сообщение\n Заявка на Техническое Обслуживание " + "\n" +
+                    String message = "Сообщение\n Заявка на Ремонт " + "\n" +
                             "ФИО: " + currentUserFIO + "\n" +
-                            "Адрес: "+ mappoint + "\n" +
-                            "Километры: "+ km + "\n" +
-                            "Наша организация " +                                                                   d1.getText().toString() + "\n" +
-                            "Наименование изделия " +                                                               d2 .getText().toString()+ "\n" +
-                            "Дата приобретения " +                                                                  d3.getText().toString() + "\n" +
-                            "№ товарной накладной " +                                                               d4.getText().toString() + "\n" +
-                            "Модель техники (оборудования) " +                                                      d5.getText().toString() + "\n" +
-                            "Серийный номер техники (оборудования) " +                                              d6.getText().toString() + "\n" +
-                            "Дата ввода в эксплуатацию " +                                                          d7.getText().toString() + "\n" +
-                            "Кол-во отработанных часов " +                                                          d8.getText().toString() + "\n" +
-                            "Модель двигателя " +                                                                   d9.getText().toString() + "\n" +
-                            "Серийный номер двигателя " +                                                           d10.getText().toString() + "\n" +
-                            "Дата реализации техники (оборудования) " +                                             d11.getText().toString() + "\n" +
-                            "Владелец техники (об-ния) " +                                                          d12.getText().toString() + "\n" +
-                            "Адрес владельца " +                                                                    d13.getText().toString() + "\n" +
-                            "Область владельца " +                                                                  d14.getText().toString() + "\n" +
-                            "Район владельца " +                                                                    d15.getText().toString() + "\n" +
-                            "Адрес места эксплуатации / места проведения ремонта " +                                d16.getText().toString() + "\n" +
-                            "Область места эксплуатации " +                                                         d17.getText().toString() + "\n" +
-                            "Район места эксплуатации " +                                                           d18.getText().toString() + "\n" +
-                            "Расстояние от технического центра до места проведения ремонта (туда и обратно), км " + d19.getText().toString() + "\n" +
-                            "Наименование дефектного изделия " +                                                    d20.getText().toString() + "\n" +
-                            "Предварительная причина поломки (выявленный недостаток) " +                            d21.getText().toString() + "\n";
-
-
+                            "Адрес: " + "\n" +
+                            "Ваша организация " + d2.getText().toString() + "\n" +
+                            "Дата приобретения " + d3.getText().toString() + "\n" +
+                            "№ товарной накладной " + d4.getText().toString() + "\n" +
+                            "Модель техники  " + d5.getText().toString() + "\n" +
+                            "Серийный номер техники (VIN) " + d6.getText().toString() + "\n" +
+                            "Дата ввода в эксплуатацию " + d7.getText().toString() + "\n" +
+                            "Кол-во отработанных часов " + d8.getText().toString() + "\n" +
+                            "Модель двигателя " + d9.getText().toString() + "\n" +
+                            "Серийный номер двигателя " + d10.getText().toString() + "\n" +
+                            "Адрес места эксплуатации / места проведения ремонта " + d11.getText().toString() + "\n" +
+                            "Описание неисправностей (При наличии) " + d12.getText().toString() + "\n" ;
                     new Thread(() -> sendMail("kaltaevaangelina@mail.ru" ,  message)).start();
                     new Thread(() -> sendTO()).start();
                 });
+
+
+
+
+
+
+
                 button2.setOnClickListener(v -> {
                     String message = "Сообщение\n Заявка на Ремонт " + "\n" +
                             "ФИО: " + currentUserFIO + "\n" +
@@ -301,24 +284,16 @@ public class MailPush extends AppCompatActivity {
                         return new PasswordAuthentication(username, password);
                     }
                 });
-
         try {
             Log.d(TAG, "Trying to send email...");
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-
             message.setText(body);
-
             Transport.send(message);
-
-            Log.d(TAG, "Email sent successfully");
-
         } catch (MessagingException e) {
-            Log.e(TAG, "Failed to send email", e);
             throw new RuntimeException(e);
         } finally {
-            Log.d(TAG, "End of sendMail()");
         }
     }
     private void sendRemont() {

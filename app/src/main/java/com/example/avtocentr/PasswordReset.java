@@ -209,7 +209,7 @@ public class PasswordReset extends AppCompatActivity {
                         Message message = new MimeMessage(session);
                         message.setFrom(new InternetAddress(username));
                         message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
-                        message.setSubject("Автоцентр - одноразовый код для регистрации в приложении Автоцентр");
+                        message.setSubject("Автоцентр - одноразовый код для сброса пароля");
                         message.setText("Ваш одноразовый код: " + code);
                         Transport.send(message);
                     } catch (MessagingException e) {

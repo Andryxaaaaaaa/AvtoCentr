@@ -5,11 +5,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -41,6 +44,7 @@ public class Register extends AppCompatActivity {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(
             "^(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d]{7,}$"
     );
+    private boolean isPasswordVisible = false;
     private String code; // Переменная для хранения сгенерированного кода
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,16 +55,32 @@ public class Register extends AppCompatActivity {
         EditText email = findViewById(R.id.editTextLogin);
         EditText password = findViewById(R.id.editTextPassword);
         Button button = findViewById(R.id.button);
+        ImageView eyeIcon = findViewById(R.id.eyeIcon);
         Button buttonstart = findViewById(R.id.buttonstart);
         ImageButton button2 = findViewById(R.id.button2);
         EditText editTextCode = findViewById(R.id.editTextCode);
         TextView TextViewcode = findViewById(R.id.textViewcode);
-
+        EditText passwordEditText = findViewById(R.id.editTextPassword);
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 startActivity(new Intent(Register.this, Login.class));
+                finish();
             }
+        });
+        eyeIcon.setOnClickListener(v -> {
+            if (isPasswordVisible) {
+                // Скрыть пароль
+                passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                eyeIcon.setImageResource(R.drawable.ic_eye);
+            } else {
+                // Показать пароль
+                passwordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                eyeIcon.setImageResource(R.drawable.ic_eye_off);
+            }
+            isPasswordVisible = !isPasswordVisible;
+            passwordEditText.setSelection(passwordEditText.length());
         });
 
         buttonstart.setOnClickListener(new View.OnClickListener() {
@@ -103,7 +123,7 @@ public class Register extends AppCompatActivity {
                                                                     @Override
                                                                     public void onSuccess(DocumentReference documentReference) {
                                                                         sp.edit().putString("CurrentUserEmail", emailText).apply();
-                                                                        startActivity(new Intent(Register.this, SignFIO.class));
+                                                                        startActivity(new Intent(Register.this, SignUser.class));
                                                                     }
                                                                 })
                                                                 .addOnFailureListener(new OnFailureListener() {
@@ -125,7 +145,7 @@ public class Register extends AppCompatActivity {
                                                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                                                     @Override
                                                                     public void onSuccess(DocumentReference documentReference) {
-                                                                        startActivity(new Intent(Register.this, SignFIO.class));
+                                                                        startActivity(new Intent(Register.this, SignUser.class));
                                                                     }
                                                                 })
                                                                 .addOnFailureListener(new OnFailureListener() {
@@ -151,7 +171,7 @@ public class Register extends AppCompatActivity {
                                     Toast.makeText(Register.this, "Ошибка при проверке email", Toast.LENGTH_LONG).show();
                                 }
                             });
-                    startActivity(new Intent(Register.this, SignFIO.class));
+                    startActivity(new Intent(Register.this, SignUser.class));
                 }
             }
         });
@@ -167,7 +187,8 @@ public class Register extends AppCompatActivity {
                 if (!Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {
                     Toast.makeText(getApplicationContext(), "Неверный формат email!", Toast.LENGTH_LONG).show();
                 } else if (!PASSWORD_PATTERN.matcher(passwordText).matches()) {
-                    Toast.makeText(getApplicationContext(), "Пароль должен содержать большую букву, цифры и не менее 8 символов", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Пароль должен содержать большую букву, цифры и не менее" +
+                            "8 символов", Toast.LENGTH_LONG).show();
                 }
                 else
                     {
@@ -178,7 +199,8 @@ public class Register extends AppCompatActivity {
                                     @Override
                                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                                         if (!queryDocumentSnapshots.isEmpty()) {
-                                            Toast.makeText(Register.this, "Пользователь с таким email уже существует", Toast.LENGTH_LONG).show();
+                                            Toast.makeText(Register.this, "Пользователь с таким email уже " +
+                                                    "существует", Toast.LENGTH_LONG).show();
                                         } else {
                                             email.setVisibility(View.GONE);
                                             password.setVisibility(View.GONE);

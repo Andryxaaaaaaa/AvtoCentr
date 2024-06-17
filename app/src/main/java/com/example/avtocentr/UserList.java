@@ -164,21 +164,73 @@ public class UserList extends AppCompatActivity {
                         for (DocumentSnapshot documentSnapshot : task.getResult()) {
                             String documentId = documentSnapshot.getId();
                             String typezayavka = documentSnapshot.getString("typezayavka");
-                            Log.d("UserListActivity", "typezayavka: " + typezayavka);
 
-                            Object chasObj = documentSnapshot.get("Кол-во отработанных часов");
+
+                            Object adresObj = documentSnapshot.get("Адрес места эксплуатации");
+                            String adres = (adresObj != null) ? adresObj.toString() : "";
+
+                            Object chasObj = documentSnapshot.get("Ваша организация");
                             String chas = (chasObj != null) ? chasObj.toString() : "";
-                            Log.d("UserListActivity", "chas: " + chas);
+
+                            Object chasObj2 = documentSnapshot.get("Дата ввода в эксплуатацию");
+                            String chas2 = (chasObj2 != null) ? chasObj2.toString() : "";
+
+                            Object chasObj3 = documentSnapshot.get("Дата приобретения");
+                            String chas3 = (chasObj3 != null) ? chasObj3.toString() : "";
+
+                            Object chasObj4 = documentSnapshot.get("Кол-во отработанных часов");
+                            String chas4 = (chasObj4 != null) ? chasObj4.toString() : "";
+
 
                             Object modelObj = documentSnapshot.get("Модель двигателя ");
                             String model = (modelObj != null) ? modelObj.toString() : "";
-                            Log.d("UserListActivity", "model: " + model);
 
-                            Object nomerdvigObj = documentSnapshot.get("Серийный номер двигателя ");
+
+                            Object nomerdvigObj = documentSnapshot.get("Модель техники");
                             String nomerdvig = (nomerdvigObj != null) ? nomerdvigObj.toString() : "";
-                            Log.d("UserListActivity", "nomerdvig: " + nomerdvig);
 
-                            String userData = "\nТип заявки: " + typezayavka + "\nКол-во отработанных часов: " + chas + "ч " + "\nМодель двигателя: " + model + " " + "\nСерийный номер двигателя: " + nomerdvig ;
+
+                            Object nomerdvigObj2 = documentSnapshot.get("Описание неисправностей (При наличии)");
+                            String nomerdvig2 = (nomerdvigObj2 != null) ? nomerdvigObj2.toString() : "";
+
+
+                            Object nomerdvigObj3 = documentSnapshot.get("Серийный номер двигателя");
+                            String nomerdvig3 = (nomerdvigObj3 != null) ? nomerdvigObj3.toString() : "";
+
+
+                            Object nomerdvigObj4 = documentSnapshot.get("Серийный номер техники (VIN)");
+                            String nomerdvig4 = (nomerdvigObj4 != null) ? nomerdvigObj4.toString() : "";
+
+                            Object nomerdvigObj5 = documentSnapshot.get("№ товарной накладной");
+                            String nomerdvig5 = (nomerdvigObj5 != null) ? nomerdvigObj5.toString() : "";
+
+                            Object nomerdvigObj6 = documentSnapshot.get("Маршрут, км");
+                            String nomerdvig6 = (nomerdvigObj6 != null) ? nomerdvigObj6.toString() : "";
+
+
+                            String userData = "\nТип заявки: " + typezayavka +
+                                    "\nАдрес места эксплуатации: " + adres  +
+                                    "\nОрганизация: " + chas + " " +
+                                    "\nДата ввода в эксплуатацию: " + chas2
+                                    +
+                                    "\nДата приобретения: " + chas3
+                                    +
+                                    "\nКол-во отработанных часов: " + chas4
+                                    +
+                                    "\nМодель двигателя: " + model
+                                    +
+                                    "\nМодель техники: " + nomerdvig
+                                    +
+                                    "\nОписание неисправностей: " + nomerdvig2
+                                    +
+                                    "\nСерийный номер двигателя: " + nomerdvig3
+                                    +
+                                    "\nСерийный номер техники (VIN): " + nomerdvig4
+                                    +
+                                    "\n№ товарной накладной: " + nomerdvig5
+                                    +
+                                    "\nМаршрут, км: " + nomerdvig6;
+
                             additionalUserDataZayavka.add(userData);
                         }
                         // Уведомляем адаптер об изменениях
@@ -225,32 +277,21 @@ public class UserList extends AppCompatActivity {
         combinedData.addAll(additionalUserDataMap);
         combinedData.addAll(additionalUserDataUserInfo);
         combinedData.addAll(additionalUserDataZayavka);
-
         new AlertDialog.Builder(this)
                 .setTitle("Закрытие заявки")
                 .setMessage("Вы собираетесь закрыть выполнение заявки,\nВы уверены что хотите удалить эту заявку?")
                 .setPositiveButton("Да", (dialog, which) -> {
-                    // Проверяем корректность индекса перед удалением
                     if (position >= 0 && position < additionalUserDataZayavka.size()) {
-                        // Удаление элемента из списка additionalUserDataZayavka
                         additionalUserDataZayavka.remove(position);
-
-                        // Удаление элемента из объединенного списка combinedData
                         combinedData.remove(position + additionalUserData.size() + additionalUserDataMap.size() + additionalUserDataUserInfo.size() + 2);
-
-                        // Обновление адаптера
                         adapter.notifyDataSetChanged();
-
-                        // Удаление документа из Firestore
                         deleteZayavkaDocument(selectedItem);
                     } else {
-                        Log.e(TAG, "Invalid index: " + position);
                     }
                 })
                 .setNegativeButton("Отмена", null)
                 .show();
     }
-
     private void deleteZayavkaDocument(String selectedItem) {
         CollectionReference zayavkaRef = FirebaseFirestore.getInstance().collection("zayavka");
         zayavkaRef.whereEqualTo("typezayavka", selectedItem)

@@ -25,7 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class SignFIO extends AppCompatActivity {
+public class SignUser extends AppCompatActivity {
 
     // Шаблоны для проверки ввода
     private static final Pattern NAME_PATTERN = Pattern.compile("^[А-Яа-яЁё]+$");
@@ -64,11 +64,15 @@ public class SignFIO extends AppCompatActivity {
                 if (familiya.isEmpty() || imya.isEmpty() || otchestvo.isEmpty() || nomer.isEmpty()) {
                     Toast.makeText(getApplicationContext(), "Проверьте поля!", Toast.LENGTH_LONG).show();
                 } else if (familiya.length() < 2 || imya.length() < 2 || otchestvo.length() < 2) {
-                    Toast.makeText(getApplicationContext(), "Фамилия, Имя и Отчество должны содержать минимум 2 буквы", Toast.LENGTH_LONG).show();
-                } else if (!NAME_PATTERN.matcher(familiya).matches() || !NAME_PATTERN.matcher(imya).matches() || !NAME_PATTERN.matcher(otchestvo).matches()) {
-                    Toast.makeText(getApplicationContext(), "Фамилия, Имя и Отчество должны содержать только кириллицу", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Фамилия, Имя и Отчество должны содержать минимум " +
+                            "2 буквы", Toast.LENGTH_LONG).show();
+                } else if (!NAME_PATTERN.matcher(familiya).matches() || !NAME_PATTERN.matcher(imya).matches() ||
+                        !NAME_PATTERN.matcher(otchestvo).matches()) {
+                    Toast.makeText(getApplicationContext(), "Фамилия, Имя и Отчество должны содержать только" +
+                            " кириллицу", Toast.LENGTH_LONG).show();
                 } else if (!PHONE_PATTERN.matcher(nomer).matches()) {
-                    Toast.makeText(getApplicationContext(), "Введите действительный номер телефона, начинающийся с 7", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Введите действительный номер телефона, начинающийся" +
+                            " с 7", Toast.LENGTH_LONG).show();
                 } else {
                     // Check if the user exists
                     db.collection("userinfo")
@@ -92,18 +96,19 @@ public class SignFIO extends AppCompatActivity {
                                             // Обновление данных пользователя в базе данных
                                             db.collection("userinfo").document(documentId).update(userData)
                                                     .addOnSuccessListener(aVoid -> {
-                                                        Toast.makeText(SignFIO.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show();
-                                                        startActivity(new Intent(SignFIO.this, Login.class));
+                                                        Toast.makeText(SignUser.this, "Данные успешно обновлены", Toast.LENGTH_LONG).show();
+                                                        startActivity(new Intent(SignUser.this, Login.class));
+                                                        finish();
                                                     })
                                                     .addOnFailureListener(e -> {
-                                                        Toast.makeText(SignFIO.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();
+                                                        Toast.makeText(SignUser.this, "Не удалось обновить данные, попробуйте еще раз", Toast.LENGTH_LONG).show();
                                                     });
                                             // Если найден документ, соответствующий текущему пользователю, выходим из цикла
                                             break;
                                         }
                                     } else {
                                         // Если документы не найдены, выведите сообщение об ошибке
-                                        Toast.makeText(SignFIO.this, "Нет данных для обновления", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(SignUser.this, "Нет данных для обновления", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });

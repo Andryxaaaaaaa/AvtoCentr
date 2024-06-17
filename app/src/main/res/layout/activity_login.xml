@@ -35,7 +35,7 @@
         android:background="@drawable/rounded_edittext_bg"
         android:backgroundTint="#E7E1E1"
         android:gravity="center"
-        android:hint="Логин"
+        android:hint="Адрес эл. почты"
         android:inputType="text" />
 
     <EditText

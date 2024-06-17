@@ -7,19 +7,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    
 
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
-        android:usesCleartextTraffic="true"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/tractor"
+        android:icon="@drawable/logoti"
         android:label="Автоцентр"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AvtoCentr"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ZayavkiListActivity"
+            android:exported="false" />
         <activity
             android:name=".PasswordReset"
             android:exported="false" />
@@ -27,13 +29,13 @@
             android:name=".UserList"
             android:exported="false" />
         <activity
-            android:name=".Home"
+            android:name=".News"
             android:exported="false" />
         <activity
-            android:name=".SignFIO"
+            android:name=".SignUser"
             android:exported="false" />
         <activity
-            android:name=".Admin"
+            android:name=".Osnovnaya"
             android:exported="false" />
         <activity
             android:name=".Profile"
@@ -42,10 +44,6 @@
             android:name=".MailPush"
             android:exported="false" />
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyD4uStbluZBnwKADWRtCPalZoddDXdNQbs" />
-
         <activity
             android:name=".map"
             android:exported="false" />
@@ -53,7 +51,7 @@
             android:name=".Register"
             android:exported="false" />
         <activity
-            android:name=".Glavnaya"
+            android:name=".Admin"
             android:exported="false" />
         <activity
             android:name=".Login"

@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 
-public class Home extends AppCompatActivity {
+public class News extends AppCompatActivity {
 
     private LinearLayout detailsContainer;
     private FirebaseFirestore db;
@@ -63,6 +63,7 @@ public class Home extends AppCompatActivity {
         cardView.setLayoutParams(cardParams);
         cardView.setRadius(16); // Устанавливаем закругление углов
         cardView.setCardElevation(35);
+
          // Устанавливаем цвет обводки // Устанавливаем цвет обводки// Устанавливаем тень для блока
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(

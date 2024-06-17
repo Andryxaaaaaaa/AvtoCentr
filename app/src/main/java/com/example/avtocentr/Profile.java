@@ -22,9 +22,11 @@ public class Profile extends AppCompatActivity {
     // Ссылка на TextView, в который будут загружены данные
     private TextView textViewAdres;
 
-
+    private TextView textViewZayavkiCount;
+    private int zayavkiCount = 0;
     private TextView textViewFIO;
     private TextView textViewNomer;
+    public String currentUserEmail;
 
     // Ссылка на SharedPreferences
     private SharedPreferences sp;
@@ -38,7 +40,7 @@ public class Profile extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-
+        textViewZayavkiCount = findViewById(R.id.textViewZayavki);
         ImageButton backButton = findViewById(R.id.buttonНазад);
 
         TextView textViewLogout = findViewById(R.id.textViewВыйтиИзАккаунта);
@@ -54,14 +56,18 @@ public class Profile extends AppCompatActivity {
                 // Переходим на активити "Вход"
                 Intent intent = new Intent(Profile.this, Login.class);
                 startActivity(intent);
+                finish();
 
             }
         });
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(Profile.this, Admin.class));
+
+                startActivity(new Intent(Profile.this, Osnovnaya.class));
+                finish();
             }
+
         });
         // Связывание TextView из макета с переменной
         textViewFIO = findViewById(R.id.textViewFIO);
@@ -71,12 +77,26 @@ public class Profile extends AppCompatActivity {
         sp = getSharedPreferences("Авторизация", Context.MODE_PRIVATE);
 
 // Получение email текущего пользователя из SharedPreferences
-        String currentUserEmail = sp.getString("CurrentUserEmail", "");
+        currentUserEmail = sp.getString("CurrentUserEmail", "");
 
         //Связывание TextView из макета с переменной
         textViewAdres = findViewById(R.id.textViewAdres);
         // Initialize Firestore
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("zayavka")
+                .whereEqualTo("user", currentUserEmail)
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+                    zayavkiCount = queryDocumentSnapshots.size(); // Получение количества заявок текущего пользователя
+                    textViewZayavkiCount.setText("Ваши заявки: " + zayavkiCount);
+                })
+                .addOnFailureListener(e -> {
+                    // Обработка ошибки при получении данных
+                    Toast.makeText(Profile.this, "Не удалось загрузить заявки: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                });
+
+
+    // Метод для открытия активити с данными о заявках
 
         // Получение данных текущего пользователя из Firestore и установка их в TextView
         db.collection("map")
@@ -127,5 +147,11 @@ public class Profile extends AppCompatActivity {
                     // Обработка ошибки
                     textViewFIO.setText("Ошибка загрузки ФИО: " + e.getMessage());
                 });
+    }
+    public void showZayavkiDetails(View view) {
+        // Логика для открытия активити с данными о заявках
+        Intent intent = new Intent(Profile.this, ZayavkiListActivity.class);
+        intent.putExtra("userEmail", currentUserEmail); // Передача email текущего пользователя
+        startActivity(intent);
     }
 }

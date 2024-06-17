@@ -23,6 +23,7 @@
         android:src="@drawable/logoti">
 
     </ImageView>
+
     <EditText
         android:id="@+id/editTextCode"
         android:layout_width="0dp"
@@ -101,7 +102,7 @@
         android:backgroundTint="#E7E1E1"
         android:gravity="center"
         android:paddingStart="-12dp"
-        android:hint="Введите логин"
+        android:hint="Введите адрес эл. почты"
         android:inputType="text" />
 
     <EditText
@@ -119,7 +120,16 @@
         android:gravity="center"
         android:hint="Введите пароль"
         android:inputType="textPassword" />
-
+    <ImageView
+        android:id="@+id/eyeIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/editTextPassword"
+        android:layout_alignBottom="@+id/editTextPassword"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="35dp"
+        android:padding="10dp"
+        android:src="@drawable/ic_eye" />
     <Button
         android:id="@+id/button"
         android:layout_width="0dp"
